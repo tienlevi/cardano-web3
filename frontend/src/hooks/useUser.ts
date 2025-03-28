@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query'
 
 function useUser() {
   const { wallet } = useWallet()
-  const { data: address } = useQuery({
+  const { data: address, isLoading: isLoadingAddress } = useQuery({
     queryKey: ['/'],
     queryFn: async () => {
       return await wallet.getChangeAddress()
@@ -31,7 +31,7 @@ function useUser() {
     },
   })
 
-  return { address, balance, rewardAddresses, policyId }
+  return { address, isLoadingAddress, balance, rewardAddresses, policyId }
 }
 
 export default useUser

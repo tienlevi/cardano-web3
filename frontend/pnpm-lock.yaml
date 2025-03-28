@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@meshsdk/core':
+        specifier: 1.9.0-beta.21
+        version: 1.9.0-beta.21(@babel/core@7.26.10)(@bufbuild/protobuf@1.10.0)(@harmoniclabs/bytestring@1.0.0)(@harmoniclabs/crypto@0.2.5)(@harmoniclabs/pair@1.0.0)(@types/react-dom@19.0.4(@types/react@19.0.10))(@types/react@19.0.10)(bufferutil@4.0.9)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(tailwindcss@4.0.13)(utf-8-validate@6.0.5)
       '@meshsdk/react':
         specifier: 1.9.0-beta.21
         version: 1.9.0-beta.21(@babel/core@7.26.10)(@harmoniclabs/bytestring@1.0.0)(@harmoniclabs/crypto@0.2.5)(@harmoniclabs/pair@1.0.0)(@types/react-dom@19.0.4(@types/react@19.0.10))(@types/react@19.0.10)(bufferutil@4.0.9)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(tailwindcss@4.0.13)(utf-8-validate@6.0.5)
@@ -217,6 +220,9 @@ packages:
     resolution: {integrity: sha512-R0XPZ/IQhU2TtetSFI9vI+7kJOJYNiCncn5ixEBW+/LNaZCo2HK37Mq3pRNzrM4FryuAkyeqY7Ujmj3I3e3t9g==}
     engines: {node: '>=16.0.0', npm: '>=7.0.0'}
 
+  '@bufbuild/protobuf@1.10.0':
+    resolution: {integrity: sha512-QDdVFLoN93Zjg36NoQPZfsVH9tZew7wKDKyV5qRdj8ntT4wQCOradQjRaTdwMhWUYsgKsvCINKKm87FdEk96Ag==}
+
   '@cardano-ogmios/client@6.9.0':
     resolution: {integrity: sha512-IsoUVsaMXiYyhWrdVKYOA5PDlX0EZ2gaq4lfk4JelRw6mcWVxemUrMaU2ndvugO9LQ3SCM1nESPgMIU0xe5FWw==}
     engines: {node: '>=14'}
@@ -265,6 +271,24 @@ packages:
 
   '@chainsafe/netmask@2.0.0':
     resolution: {integrity: sha512-I3Z+6SWUoaljh3TBzCnCxjlUyN8tA+NAk5L6m9IxvCf1BENQTePzPMis97CoN/iMW1St3WN+AWCCRp+TTBRiDg==}
+
+  '@connectrpc/connect-node@1.4.0':
+    resolution: {integrity: sha512-0ANnrr6SvsjevsWEgdzHy7BaHkluZyS6s4xNoVt7RBHFR5V/kT9lPokoIbYUOU9JHzdRgTaS3x5595mwUsu15g==}
+    engines: {node: '>=16.0.0'}
+    peerDependencies:
+      '@bufbuild/protobuf': ^1.4.2
+      '@connectrpc/connect': 1.4.0
+
+  '@connectrpc/connect-web@1.4.0':
+    resolution: {integrity: sha512-13aO4psFbbm7rdOFGV0De2Za64DY/acMspgloDlcOKzLPPs0yZkhp1OOzAQeiAIr7BM/VOHIA3p8mF0inxCYTA==}
+    peerDependencies:
+      '@bufbuild/protobuf': ^1.4.2
+      '@connectrpc/connect': 1.4.0
+
+  '@connectrpc/connect@1.4.0':
+    resolution: {integrity: sha512-vZeOkKaAjyV4+RH3+rJZIfDFJAfr+7fyYr6sLDKbYX3uuTVszhFe9/YKf5DNqrDb5cKdKVlYkGn6DTDqMitAnA==}
+    peerDependencies:
+      '@bufbuild/protobuf': ^1.4.2
 
   '@csstools/color-helpers@5.0.2':
     resolution: {integrity: sha512-JqWH1vsgdGcw2RR6VliXXdA0/59LttzlU8UlRT/iUUsEeWfYq8I+K0yhihEUTTHLRm1EXvpsCx3083EU15ecsA==}
@@ -488,6 +512,10 @@ packages:
   '@fabianbormann/meerkat@1.0.17':
     resolution: {integrity: sha512-sRPTwXJbZX/+CmLAYjewvEuOllzmvWONNKSqzrUbW427JfYPypIcJumJoZ0CMbmj9fBJkVTprihu2qrdN/atMA==}
 
+  '@fastify/busboy@2.1.1':
+    resolution: {integrity: sha512-vBZP4NlzfOlerQTnba4aqZoMhE/a9HY7HRqoOPaETQcSQuWEIyZMHGfVu6w9wGtGK5fED5qRs2DteVCjOH60sA==}
+    engines: {node: '>=14'}
+
   '@floating-ui/core@1.6.9':
     resolution: {integrity: sha512-uMXCuQ3BItDUbAMhIXw7UPXRfAlOAvZzdK9BWpE60MCn+Svt3aLn9jsPTi/WNGlRUu2uI0v5S7JiIUsbsvh3fw==}
 
@@ -603,6 +631,12 @@ packages:
 
   '@meshsdk/core-cst@1.9.0-beta.21':
     resolution: {integrity: sha512-zNz2gIuCEm7S3r8FMJQmkrkZxhhBC/o8lnRwHLy9UQKJ2cBATK0rx564l6qUN9e7vlup+hsDq75qbczwTVyHIA==}
+
+  '@meshsdk/core@1.9.0-beta.21':
+    resolution: {integrity: sha512-cZwtMjB2uuo0Z6w4tW/6uW6OvG0/Pq5q9JRdAXq/S0wNqHh46abLhgHtcI6YR6EUS71L80Ipj3DPEeJTShyxeg==}
+
+  '@meshsdk/provider@1.9.0-beta.21':
+    resolution: {integrity: sha512-zHeuKUy9Bp7Ac3pzDGfKteYdA0XHAesDWBTe10Y3HagOAfcPBCC57NkrQyfYquXUQloSpwwRuZPTRm9jEbpLRA==}
 
   '@meshsdk/react@1.9.0-beta.21':
     resolution: {integrity: sha512-osgMx0supsrbuuQk1X3xMkTqVvmiCAVwLtYGQpObaIXbUHYt91qwNZqHUcgxNK5yoBFHnsRPkaUNr5WCqgXtVw==}
@@ -1313,6 +1347,9 @@ packages:
   '@types/json-schema@7.0.15':
     resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==}
 
+  '@types/node@20.14.10':
+    resolution: {integrity: sha512-MdiXf+nDuMvY0gJKxyfZ7/6UFsETO7mGKF54MVD/ekJS6HdFtpZFBgrh6Pseu64XTb2MLyFPlbW6hj8HYRQNOQ==}
+
   '@types/node@22.13.10':
     resolution: {integrity: sha512-I6LPUvlRH+O6VRUqYOcMudhaIdUVWfsjnZavnsraHvpBwaEyMN29ry+0UVJhImYL16xsscu0aske3yA+uPOWfw==}
 
@@ -1370,6 +1407,13 @@ packages:
   '@typescript-eslint/visitor-keys@8.26.1':
     resolution: {integrity: sha512-AjOC3zfnxd6S4Eiy3jwktJPclqhFHNyd8L6Gycf9WUPoKZpgM5PjkxY1X7uSy61xVpiJDhhk7XT2NVsN3ALTWg==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+
+  '@utxorpc/sdk@0.6.2':
+    resolution: {integrity: sha512-2duxfbH8B7DX3ync8U7BUYIi6lzerYwb8lMpW6Ax1fv3zqmJE39lGsBRVozJU1X3ITSB526ODkhgUo8DHRLvtQ==}
+
+  '@utxorpc/spec@0.10.1':
+    resolution: {integrity: sha512-0INat5xSjkTeqKr+JO3SMQQ2PxcfZNUi5wJja/Fpnp68f52eTJf4X4QGy7tzqYzMsK/ZYhRr95J+WUeM6Vbmwg==}
+    engines: {node: '>=20.0.0'}
 
   '@vitejs/plugin-react-swc@3.8.0':
     resolution: {integrity: sha512-T4sHPvS+DIqDP51ifPqa9XIRAz/kIvIi8oXcnOZZgHmMotgmmdxe/DD5tMFlt5nuIRzT0/QuiwmKlH0503Aapw==}
@@ -3558,8 +3602,15 @@ packages:
   uint8arrays@5.1.0:
     resolution: {integrity: sha512-vA6nFepEmlSKkMBnLBaUMVvAC4G3CTmO58C12y4sq6WPDOR7mOFYOi7GlrQ4djeSbP6JG9Pv9tJDM97PedRSww==}
 
+  undici-types@5.26.5:
+    resolution: {integrity: sha512-JlCMO+ehdEIKqlFxk6IfVoAUVmgz7cU7zD/h9XZ0qzeosSHmUJVOzSQvvYSYWXkFXC+IfLKSIffhv0sVZup6pA==}
+
   undici-types@6.20.0:
     resolution: {integrity: sha512-Ny6QZ2Nju20vw1SRHe3d9jVu6gJ+4e3+MMpqu7pqE5HT6WsTSlce++GQmK5UXS8mzV8DSYHrQH+Xrf2jVcuKNg==}
+
+  undici@5.29.0:
+    resolution: {integrity: sha512-raqeBD6NQK4SkWhQzeYKd1KmIG6dllBOTt55Rmkt4HtI9mwdWtJljnrXjAFUBLTSN67HWrOIZ3EPF4kjUw80Bg==}
+    engines: {node: '>=14.0'}
 
   unordered-array-remove@1.0.2:
     resolution: {integrity: sha512-45YsfD6svkgaCBNyvD+dFHm4qFX9g3wRSIVgWVPtm2OCnphvPxzJoe20ATsiNpNJrmzHifnxm+BN5F7gFT/4gw==}
@@ -3997,6 +4048,8 @@ snapshots:
       multiformats: 13.3.2
       uint8arrays: 5.1.0
 
+  '@bufbuild/protobuf@1.10.0': {}
+
   '@cardano-ogmios/client@6.9.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)':
     dependencies:
       '@cardano-ogmios/schema': 6.9.0
@@ -4078,6 +4131,21 @@ snapshots:
   '@chainsafe/netmask@2.0.0':
     dependencies:
       '@chainsafe/is-ip': 2.1.0
+
+  '@connectrpc/connect-node@1.4.0(@bufbuild/protobuf@1.10.0)(@connectrpc/connect@1.4.0(@bufbuild/protobuf@1.10.0))':
+    dependencies:
+      '@bufbuild/protobuf': 1.10.0
+      '@connectrpc/connect': 1.4.0(@bufbuild/protobuf@1.10.0)
+      undici: 5.29.0
+
+  '@connectrpc/connect-web@1.4.0(@bufbuild/protobuf@1.10.0)(@connectrpc/connect@1.4.0(@bufbuild/protobuf@1.10.0))':
+    dependencies:
+      '@bufbuild/protobuf': 1.10.0
+      '@connectrpc/connect': 1.4.0(@bufbuild/protobuf@1.10.0)
+
+  '@connectrpc/connect@1.4.0(@bufbuild/protobuf@1.10.0)':
+    dependencies:
+      '@bufbuild/protobuf': 1.10.0
 
   '@csstools/color-helpers@5.0.2': {}
 
@@ -4243,6 +4311,8 @@ snapshots:
       - bare-buffer
       - supports-color
 
+  '@fastify/busboy@2.1.1': {}
+
   '@floating-ui/core@1.6.9':
     dependencies:
       '@floating-ui/utils': 0.2.9
@@ -4384,6 +4454,57 @@ snapshots:
       - '@harmoniclabs/crypto'
       - '@harmoniclabs/pair'
       - bufferutil
+      - encoding
+      - rxjs
+      - utf-8-validate
+
+  '@meshsdk/core@1.9.0-beta.21(@babel/core@7.26.10)(@bufbuild/protobuf@1.10.0)(@harmoniclabs/bytestring@1.0.0)(@harmoniclabs/crypto@0.2.5)(@harmoniclabs/pair@1.0.0)(@types/react-dom@19.0.4(@types/react@19.0.10))(@types/react@19.0.10)(bufferutil@4.0.9)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(tailwindcss@4.0.13)(utf-8-validate@6.0.5)':
+    dependencies:
+      '@meshsdk/common': 1.9.0-beta.21
+      '@meshsdk/core-cst': 1.9.0-beta.21(@harmoniclabs/bytestring@1.0.0)(@harmoniclabs/crypto@0.2.5)(@harmoniclabs/pair@1.0.0)(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      '@meshsdk/provider': 1.9.0-beta.21(@bufbuild/protobuf@1.10.0)(@harmoniclabs/bytestring@1.0.0)(@harmoniclabs/crypto@0.2.5)(@harmoniclabs/pair@1.0.0)(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      '@meshsdk/react': 1.9.0-beta.21(@babel/core@7.26.10)(@harmoniclabs/bytestring@1.0.0)(@harmoniclabs/crypto@0.2.5)(@harmoniclabs/pair@1.0.0)(@types/react-dom@19.0.4(@types/react@19.0.10))(@types/react@19.0.10)(bufferutil@4.0.9)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(tailwindcss@4.0.13)(utf-8-validate@6.0.5)
+      '@meshsdk/transaction': 1.9.0-beta.21(@harmoniclabs/bytestring@1.0.0)(@harmoniclabs/crypto@0.2.5)(@harmoniclabs/pair@1.0.0)(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      '@meshsdk/wallet': 1.9.0-beta.21(@harmoniclabs/bytestring@1.0.0)(@harmoniclabs/crypto@0.2.5)(@harmoniclabs/pair@1.0.0)(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+    transitivePeerDependencies:
+      - '@babel/core'
+      - '@bufbuild/protobuf'
+      - '@dcspark/cardano-multiplatform-lib-asmjs'
+      - '@dcspark/cardano-multiplatform-lib-browser'
+      - '@dcspark/cardano-multiplatform-lib-nodejs'
+      - '@harmoniclabs/bytestring'
+      - '@harmoniclabs/crypto'
+      - '@harmoniclabs/pair'
+      - '@types/react'
+      - '@types/react-dom'
+      - bare-buffer
+      - bufferutil
+      - debug
+      - encoding
+      - react
+      - react-dom
+      - rxjs
+      - supports-color
+      - tailwindcss
+      - utf-8-validate
+
+  '@meshsdk/provider@1.9.0-beta.21(@bufbuild/protobuf@1.10.0)(@harmoniclabs/bytestring@1.0.0)(@harmoniclabs/crypto@0.2.5)(@harmoniclabs/pair@1.0.0)(bufferutil@4.0.9)(utf-8-validate@6.0.5)':
+    dependencies:
+      '@meshsdk/common': 1.9.0-beta.21
+      '@meshsdk/core-cst': 1.9.0-beta.21(@harmoniclabs/bytestring@1.0.0)(@harmoniclabs/crypto@0.2.5)(@harmoniclabs/pair@1.0.0)(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      '@utxorpc/sdk': 0.6.2(@bufbuild/protobuf@1.10.0)
+      '@utxorpc/spec': 0.10.1
+      axios: 1.8.3
+    transitivePeerDependencies:
+      - '@bufbuild/protobuf'
+      - '@dcspark/cardano-multiplatform-lib-asmjs'
+      - '@dcspark/cardano-multiplatform-lib-browser'
+      - '@dcspark/cardano-multiplatform-lib-nodejs'
+      - '@harmoniclabs/bytestring'
+      - '@harmoniclabs/crypto'
+      - '@harmoniclabs/pair'
+      - bufferutil
+      - debug
       - encoding
       - rxjs
       - utf-8-validate
@@ -5103,6 +5224,10 @@ snapshots:
 
   '@types/json-schema@7.0.15': {}
 
+  '@types/node@20.14.10':
+    dependencies:
+      undici-types: 5.26.5
+
   '@types/node@22.13.10':
     dependencies:
       undici-types: 6.20.0
@@ -5191,6 +5316,21 @@ snapshots:
     dependencies:
       '@typescript-eslint/types': 8.26.1
       eslint-visitor-keys: 4.2.0
+
+  '@utxorpc/sdk@0.6.2(@bufbuild/protobuf@1.10.0)':
+    dependencies:
+      '@connectrpc/connect': 1.4.0(@bufbuild/protobuf@1.10.0)
+      '@connectrpc/connect-node': 1.4.0(@bufbuild/protobuf@1.10.0)(@connectrpc/connect@1.4.0(@bufbuild/protobuf@1.10.0))
+      '@connectrpc/connect-web': 1.4.0(@bufbuild/protobuf@1.10.0)(@connectrpc/connect@1.4.0(@bufbuild/protobuf@1.10.0))
+      '@types/node': 20.14.10
+      '@utxorpc/spec': 0.10.1
+      buffer: 6.0.3
+    transitivePeerDependencies:
+      - '@bufbuild/protobuf'
+
+  '@utxorpc/spec@0.10.1':
+    dependencies:
+      '@bufbuild/protobuf': 1.10.0
 
   '@vitejs/plugin-react-swc@3.8.0(vite@6.2.1(@types/node@22.13.10)(jiti@2.4.2)(lightningcss@1.29.2))':
     dependencies:
@@ -7472,7 +7612,13 @@ snapshots:
     dependencies:
       multiformats: 13.3.2
 
+  undici-types@5.26.5: {}
+
   undici-types@6.20.0: {}
+
+  undici@5.29.0:
+    dependencies:
+      '@fastify/busboy': 2.1.1
 
   unordered-array-remove@1.0.2: {}
 
