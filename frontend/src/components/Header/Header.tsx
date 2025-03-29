@@ -20,6 +20,9 @@ export default function Header() {
             <Link to='/transaction' className='text-gray-600 hover:text-gray-900'>
               Transaction
             </Link>
+            <Link to='/mint' className='text-gray-600 hover:text-gray-900'>
+              Mint
+            </Link>
           </nav>
 
           {/* Mobile menu button */}
@@ -64,6 +67,9 @@ export default function Header() {
               </Link>
               <Link to='/transaction' className='text-gray-600 hover:text-gray-900'>
                 Transaction
+              </Link>
+              <Link to='/mint' className='text-gray-600 hover:text-gray-900'>
+                Mint
               </Link>
             </div>
           </div>

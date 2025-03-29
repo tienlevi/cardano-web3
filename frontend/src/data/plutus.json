@@ -1,0 +1,195 @@
+{
+  "preamble": {
+    "title": "aiken/mesh-sdk",
+    "description": "Aiken contracts for project 'aiken/mesh-sdk'",
+    "version": "0.0.0",
+    "plutusVersion": "v3",
+    "compiler": {
+      "name": "Aiken",
+      "version": "v1.1.15+f03633e"
+    },
+    "license": "Apache-2.0"
+  },
+  "validators": [
+    {
+      "title": "placeholder.markets.spend",
+      "datum": {
+        "title": "_datum",
+        "schema": {
+          "$ref": "#/definitions/types~1market~1Datum"
+        }
+      },
+      "redeemer": {
+        "title": "redeemer",
+        "schema": {
+          "$ref": "#/definitions/types~1market~1Market"
+        }
+      },
+      "compiledCode": "59023101010029800aba2aba1aab9faab9eaab9dab9a488888966002646465300130053754003370e9000488c8cc00400400c896600200314a115980099b8f375c601800200714a3133002002300d0014020805a601000730080024888896600266e1d20020058994c004c038006601c601e003300b3754005159800980298059baa002899192cc004cc018dd6180818071baa005375c6020602200315980099b8848000dd6980800144cdc79bae301000148903627579008a50403114a08060c040004c030dd500144c8c9660026600c6eb0c040c038dd50029bae301030110018acc004cdc4240006eb4c04000a266e3cdd71808000a450473656c6c008a50403114a08060c040004c030dd5001201448889660026012005132323298009bae30150019bad30150039bae301500248896600260320090078b202e180a800980a00098081baa0068acc004cdc3a4004005132323298009bae30150019bad30150039bae301500248896600260320090078b202e180a800980a00098081baa0068b201c4038300b375400d1598009802002c4c966002600a60166ea800a264646644b300130130038acc004cc020dd6180918081baa007379091011ce09d36c79f0d6d6e9e5252e74fd9b9e1c4ea16b3e57bf71d33b4e72300899b8f375c6024602660206ea8019221084d696e74204e6f77008a5040391640446eb8c040004dd71808001180800098061baa0028b2014375c601a60166ea801a2c80490090c01cc020004c01c004c00cdd5003c52689b2b20021",
+      "hash": "4f181bd98d2c17138cd841d94ec66460d63413a8d99ebe797ffaac23"
+    },
+    {
+      "title": "placeholder.markets.mint",
+      "redeemer": {
+        "title": "redeemer",
+        "schema": {
+          "$ref": "#/definitions/types~1mint~1MintAction"
+        }
+      },
+      "compiledCode": "59023101010029800aba2aba1aab9faab9eaab9dab9a488888966002646465300130053754003370e9000488c8cc00400400c896600200314a115980099b8f375c601800200714a3133002002300d0014020805a601000730080024888896600266e1d20020058994c004c038006601c601e003300b3754005159800980298059baa002899192cc004cc018dd6180818071baa005375c6020602200315980099b8848000dd6980800144cdc79bae301000148903627579008a50403114a08060c040004c030dd500144c8c9660026600c6eb0c040c038dd50029bae301030110018acc004cdc4240006eb4c04000a266e3cdd71808000a450473656c6c008a50403114a08060c040004c030dd5001201448889660026012005132323298009bae30150019bad30150039bae301500248896600260320090078b202e180a800980a00098081baa0068acc004cdc3a4004005132323298009bae30150019bad30150039bae301500248896600260320090078b202e180a800980a00098081baa0068b201c4038300b375400d1598009802002c4c966002600a60166ea800a264646644b300130130038acc004cc020dd6180918081baa007379091011ce09d36c79f0d6d6e9e5252e74fd9b9e1c4ea16b3e57bf71d33b4e72300899b8f375c6024602660206ea8019221084d696e74204e6f77008a5040391640446eb8c040004dd71808001180800098061baa0028b2014375c601a60166ea801a2c80490090c01cc020004c01c004c00cdd5003c52689b2b20021",
+      "hash": "4f181bd98d2c17138cd841d94ec66460d63413a8d99ebe797ffaac23"
+    },
+    {
+      "title": "placeholder.markets.else",
+      "redeemer": {
+        "schema": {}
+      },
+      "compiledCode": "59023101010029800aba2aba1aab9faab9eaab9dab9a488888966002646465300130053754003370e9000488c8cc00400400c896600200314a115980099b8f375c601800200714a3133002002300d0014020805a601000730080024888896600266e1d20020058994c004c038006601c601e003300b3754005159800980298059baa002899192cc004cc018dd6180818071baa005375c6020602200315980099b8848000dd6980800144cdc79bae301000148903627579008a50403114a08060c040004c030dd500144c8c9660026600c6eb0c040c038dd50029bae301030110018acc004cdc4240006eb4c04000a266e3cdd71808000a450473656c6c008a50403114a08060c040004c030dd5001201448889660026012005132323298009bae30150019bad30150039bae301500248896600260320090078b202e180a800980a00098081baa0068acc004cdc3a4004005132323298009bae30150019bad30150039bae301500248896600260320090078b202e180a800980a00098081baa0068b201c4038300b375400d1598009802002c4c966002600a60166ea800a264646644b300130130038acc004cc020dd6180918081baa007379091011ce09d36c79f0d6d6e9e5252e74fd9b9e1c4ea16b3e57bf71d33b4e72300899b8f375c6024602660206ea8019221084d696e74204e6f77008a5040391640446eb8c040004dd71808001180800098061baa0028b2014375c601a60166ea801a2c80490090c01cc020004c01c004c00cdd5003c52689b2b20021",
+      "hash": "4f181bd98d2c17138cd841d94ec66460d63413a8d99ebe797ffaac23"
+    },
+    {
+      "title": "placeholder.spend_money.spend",
+      "datum": {
+        "title": "datum",
+        "schema": {
+          "$ref": "#/definitions/types~1market~1Datum"
+        }
+      },
+      "redeemer": {
+        "title": "redeemer",
+        "schema": {
+          "$ref": "#/definitions/types~1market~1Redeemer"
+        }
+      },
+      "compiledCode": "59012c01010029800aba2aba1aab9faab9eaab9dab9a48888896600264646644b30013370e900118031baa00189919912cc004cdc3a400060126ea8016264646644b300130110038acc004cdc3a4000601a6ea801626464b30013371e6eb8c048c040dd5005a450753756363657373008acc004c8cc88cc008008004896600200314a115980099b8f375c602a00200714a31330020023016001404480a0dd6180998089baa301300e375c602400515980099b87375a602400290500fc4cdc79bae30123013001489045469656e008a50403914a08072294100e180900098071baa3010300e375400b16403116403c6eb4c038004dd71807001180700098051baa0058b2010300a001300a300b00130073754003164014600e002600e6010002600e00260066ea801e29344d9590011",
+      "hash": "6213d54eac79892450e0125a0ced7a86711f0522b8b44e62f9e2b3ea"
+    },
+    {
+      "title": "placeholder.spend_money.else",
+      "redeemer": {
+        "schema": {}
+      },
+      "compiledCode": "59012c01010029800aba2aba1aab9faab9eaab9dab9a48888896600264646644b30013370e900118031baa00189919912cc004cdc3a400060126ea8016264646644b300130110038acc004cdc3a4000601a6ea801626464b30013371e6eb8c048c040dd5005a450753756363657373008acc004c8cc88cc008008004896600200314a115980099b8f375c602a00200714a31330020023016001404480a0dd6180998089baa301300e375c602400515980099b87375a602400290500fc4cdc79bae30123013001489045469656e008a50403914a08072294100e180900098071baa3010300e375400b16403116403c6eb4c038004dd71807001180700098051baa0058b2010300a001300a300b00130073754003164014600e002600e6010002600e00260066ea801e29344d9590011",
+      "hash": "6213d54eac79892450e0125a0ced7a86711f0522b8b44e62f9e2b3ea"
+    }
+  ],
+  "definitions": {
+    "ByteArray": {
+      "dataType": "bytes"
+    },
+    "Int": {
+      "dataType": "integer"
+    },
+    "aiken/crypto/VerificationKeyHash": {
+      "title": "VerificationKeyHash",
+      "dataType": "bytes"
+    },
+    "types/market/Datum": {
+      "title": "Datum",
+      "anyOf": [
+        {
+          "title": "Datum",
+          "dataType": "constructor",
+          "index": 0,
+          "fields": [
+            {
+              "title": "owner",
+              "$ref": "#/definitions/aiken~1crypto~1VerificationKeyHash"
+            },
+            {
+              "title": "money",
+              "$ref": "#/definitions/Int"
+            },
+            {
+              "title": "name",
+              "$ref": "#/definitions/ByteArray"
+            }
+          ]
+        }
+      ]
+    },
+    "types/market/Market": {
+      "title": "Market",
+      "anyOf": [
+        {
+          "title": "Buy",
+          "dataType": "constructor",
+          "index": 0,
+          "fields": [
+            {
+              "title": "amount",
+              "$ref": "#/definitions/Int"
+            },
+            {
+              "title": "buyer",
+              "$ref": "#/definitions/ByteArray"
+            },
+            {
+              "title": "owner",
+              "$ref": "#/definitions/aiken~1crypto~1VerificationKeyHash"
+            }
+          ]
+        },
+        {
+          "title": "Sell",
+          "dataType": "constructor",
+          "index": 1,
+          "fields": [
+            {
+              "title": "amount",
+              "$ref": "#/definitions/Int"
+            },
+            {
+              "title": "seller",
+              "$ref": "#/definitions/ByteArray"
+            },
+            {
+              "title": "owner",
+              "$ref": "#/definitions/aiken~1crypto~1VerificationKeyHash"
+            }
+          ]
+        }
+      ]
+    },
+    "types/market/Redeemer": {
+      "title": "Redeemer",
+      "anyOf": [
+        {
+          "title": "Redeemer",
+          "dataType": "constructor",
+          "index": 0,
+          "fields": [
+            {
+              "title": "msg",
+              "$ref": "#/definitions/ByteArray"
+            },
+            {
+              "title": "money",
+              "$ref": "#/definitions/Int"
+            }
+          ]
+        }
+      ]
+    },
+    "types/mint/MintAction": {
+      "title": "MintAction",
+      "anyOf": [
+        {
+          "title": "MintAction",
+          "dataType": "constructor",
+          "index": 0,
+          "fields": [
+            {
+              "title": "owner",
+              "$ref": "#/definitions/ByteArray"
+            },
+            {
+              "title": "msg",
+              "$ref": "#/definitions/ByteArray"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
