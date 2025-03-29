@@ -10,6 +10,13 @@ function useUser() {
     },
   })
 
+  const { data: utxos } = useQuery({
+    queryKey: ['/'],
+    queryFn: async () => {
+      return await wallet.getUtxos()
+    },
+  })
+
   const { data: balance } = useQuery({
     queryKey: ['/'],
     queryFn: async () => {
@@ -31,7 +38,7 @@ function useUser() {
     },
   })
 
-  return { address, isLoadingAddress, balance, rewardAddresses, policyId }
+  return { address, isLoadingAddress, balance, rewardAddresses, policyId, utxos }
 }
 
 export default useUser

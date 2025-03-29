@@ -1,4 +1,4 @@
-import Transactions from '@/components/Transactions'
+import SignData from '@/components/SignData'
 import { useWallet } from '@meshsdk/react'
 
 function Home() {
@@ -9,7 +9,7 @@ function Home() {
       <div className='text-4xl font-bold'>Mesh SDK</div>
       {connected ? (
         <>
-          <Transactions />
+          <SignData />
         </>
       ) : (
         <div
