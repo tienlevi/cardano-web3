@@ -1,12 +1,18 @@
 import { useWallet } from '@meshsdk/react'
 import useUser from '@/hooks/useUser'
 import { useState, useRef, useEffect } from 'react'
+import usePersist from '@/hooks/usePersist'
 
 function ConnectWallet() {
   const { connected, connecting, connect, disconnect } = useWallet()
   const { address, isLoadingAddress, balance } = useUser()
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false)
+  const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
+  const namePersist = usePersist()
+
+  const handleConnect = async () => {
+    await connect('lace', [8, 30, 95], true)
+  }
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -20,7 +26,7 @@ function ConnectWallet() {
 
   return (
     <>
-      {connected ? (
+      {connected || namePersist === 'lace' ? (
         <div className='relative' ref={dropdownRef}>
           <button
             className='px-4 py-2 bg-primary text-white rounded-4xl'
@@ -55,7 +61,7 @@ function ConnectWallet() {
       ) : (
         <div
           className={`w-[180px] text-center px-4 py-2 bg-primary text-white rounded-4xl cursor-pointer`}
-          onClick={() => connect('lace', [8, 30, 95], true)}
+          onClick={() => handleConnect()}
         >
           {connecting ? 'Connecting...' : 'Connect Wallet'}
         </div>
