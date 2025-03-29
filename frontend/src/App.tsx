@@ -2,12 +2,14 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { routers } from '@/routes/routes'
 import QueryContext from './context/QueryContext'
 import MeshContext from './context/MeshContext'
+import Header from './components/Header/Header'
 
 function App() {
   return (
     <QueryContext>
       <MeshContext>
         <BrowserRouter>
+          <Header />
           <Routes>
             <Route>
               {routers.map((route) => (

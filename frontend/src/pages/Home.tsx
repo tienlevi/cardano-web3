@@ -1,4 +1,3 @@
-import ConnectWallet from '@/components/ConnectWallet'
 import Transactions from '@/components/Transactions'
 import { useWallet } from '@meshsdk/react'
 
@@ -10,7 +9,6 @@ function Home() {
       <div className='text-4xl font-bold'>Mesh SDK</div>
       {connected ? (
         <>
-          <ConnectWallet />
           <Transactions />
         </>
       ) : (
