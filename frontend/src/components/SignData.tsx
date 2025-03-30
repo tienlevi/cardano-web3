@@ -13,7 +13,7 @@ function SignData() {
     },
   })
   return (
-    <div className='w-full flex flex-col bg-white p-3 rounded-2xl shadow-[0_1px_8px_0_rgba(0,0,0,0.2)] gap-2.5'>
+    <div className='w-full flex flex-col bg-white p-3 rounded-2xl !shadow-[0_1px_8px_0_rgba(0,0,0,0.2)] gap-2.5'>
       <FormItem label='Message' value={message} onChange={(e) => setMessage(e.target.value)} />
       <div
         className={`w-full text-center px-4 py-2 bg-primary text-white rounded-4xl cursor-pointer`}

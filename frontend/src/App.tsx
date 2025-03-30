@@ -3,6 +3,7 @@ import { routers } from '@/routes/routes'
 import QueryContext from './context/QueryContext'
 import MeshContext from './context/MeshContext'
 import Header from './components/Header/Header'
+import '@meshsdk/react/styles.css'
 
 function App() {
   return (
