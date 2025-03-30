@@ -1,14 +1,9 @@
-import { useWallet } from '@meshsdk/react'
+import { useAddress, useWallet } from '@meshsdk/react'
 import { useQuery } from '@tanstack/react-query'
 
 function useUser() {
   const { wallet } = useWallet()
-  const { data: address, isLoading: isLoadingAddress } = useQuery({
-    queryKey: ['/'],
-    queryFn: async () => {
-      return await wallet.getChangeAddress()
-    },
-  })
+  const address = useAddress()
 
   const { data: utxos } = useQuery({
     queryKey: ['/'],
@@ -38,7 +33,14 @@ function useUser() {
     },
   })
 
-  return { address, isLoadingAddress, balance, rewardAddresses, policyId, utxos }
+  const { data: usedAddress } = useQuery({
+    queryKey: ['/'],
+    queryFn: async () => {
+      return await wallet.getUsedAddresses()
+    },
+  })
+
+  return { address, usedAddress, balance, rewardAddresses, policyId, utxos }
 }
 
 export default useUser

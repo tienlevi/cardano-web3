@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { useWallet } from '@meshsdk/react'
 import { MeshTxBuilder } from '@meshsdk/core'
 import { useMutation } from '@tanstack/react-query'
