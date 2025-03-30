@@ -20,17 +20,7 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
-    "noUncheckedSideEffectImports": true,
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["src/*"]
-    }
+    "noUncheckedSideEffectImports": true
   },
-  "include": [
-    "../fe-next/src/context",
-    "src",
-    "../fe-next/src/hooks/useUser.ts",
-    "../fe-next/src/components/ConnectWallet.tsx",
-    "../fe-next/src/components/Transaction.tsx"
-  ]
+  "include": ["src"]
 }

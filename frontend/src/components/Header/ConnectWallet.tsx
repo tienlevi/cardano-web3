@@ -1,21 +1,24 @@
-import { CardanoWallet } from '@meshsdk/react'
-import useUser from '@/hooks/useUser'
-import { useState, useRef, useEffect } from 'react'
+import { CardanoWallet } from "@meshsdk/react";
+import useUser from "../../hooks/useUser";
+import { useState, useRef, useEffect } from "react";
 
 function ConnectWallet() {
-  const { balance } = useUser()
-  const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false)
-  const dropdownRef = useRef<HTMLDivElement>(null)
+  const { balance } = useUser();
+  const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        setIsDropdownOpen(false)
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsDropdownOpen(false);
       }
     }
-    document.addEventListener('mousedown', handleClickOutside)
-    return () => document.removeEventListener('mousedown', handleClickOutside)
-  }, [])
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   return (
     <>
@@ -59,9 +62,9 @@ function ConnectWallet() {
           {connecting ? 'Connecting...' : 'Connect Wallet'}
         </div>
       )} */}
-      <CardanoWallet label='Connect Wallet' persist={true} />
+      <CardanoWallet label="Connect Wallet" persist={true} />
     </>
-  )
+  );
 }
 
-export default ConnectWallet
+export default ConnectWallet;

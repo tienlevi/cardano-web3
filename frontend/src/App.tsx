@@ -1,9 +1,9 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
-import { routers } from '@/routes/routes'
-import QueryContext from './context/QueryContext'
-import MeshContext from './context/MeshContext'
-import Header from './components/Header/Header'
-import '@meshsdk/react/styles.css'
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { routers } from "./routes/routes";
+import QueryContext from "./context/QueryContext";
+import MeshContext from "./context/MeshContext";
+import Header from "./components/Header/Header";
+import "@meshsdk/react/styles.css";
 
 function App() {
   return (
@@ -14,15 +14,19 @@ function App() {
           <Routes>
             <Route>
               {routers.map((route) => (
-                <Route key={route.id} path={route.href} element={route.element} />
+                <Route
+                  key={route.id}
+                  path={route.href}
+                  element={route.element}
+                />
               ))}
-              <Route path='*' element={<Navigate to='/' replace />} />
+              <Route path="*" element={<Navigate to="/" replace />} />
             </Route>
           </Routes>
         </BrowserRouter>
       </MeshContext>
     </QueryContext>
-  )
+  );
 }
 
-export default App
+export default App;
