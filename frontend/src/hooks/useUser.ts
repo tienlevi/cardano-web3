@@ -1,46 +1,55 @@
-import { useAddress, useWallet } from '@meshsdk/react'
-import { useQuery } from '@tanstack/react-query'
+import { useAddress, useAssets, useWallet } from "@meshsdk/react";
+import { useQuery } from "@tanstack/react-query";
 
 function useUser() {
-  const { wallet } = useWallet()
-  const address = useAddress()
+  const { wallet } = useWallet();
+  const address = useAddress();
+  const assest = useAssets();
 
   const { data: utxos } = useQuery({
-    queryKey: ['/'],
+    queryKey: ["/"],
     queryFn: async () => {
-      return await wallet.getUtxos()
+      return await wallet.getUtxos();
     },
-  })
+  });
 
   const { data: balance } = useQuery({
-    queryKey: ['/'],
+    queryKey: ["/"],
     queryFn: async () => {
-      return await wallet.getBalance()
+      return await wallet.getBalance();
     },
-  })
+  });
 
   const { data: rewardAddresses } = useQuery({
-    queryKey: ['/'],
+    queryKey: ["/"],
     queryFn: async () => {
-      return await wallet.getRewardAddresses()
+      return await wallet.getRewardAddresses();
     },
-  })
+  });
 
   const { data: policyId } = useQuery({
-    queryKey: ['/'],
+    queryKey: ["/"],
     queryFn: async () => {
-      return await wallet.getPolicyIds()
+      return await wallet.getPolicyIds();
     },
-  })
+  });
 
   const { data: usedAddress } = useQuery({
-    queryKey: ['/'],
+    queryKey: ["/"],
     queryFn: async () => {
-      return await wallet.getUsedAddresses()
+      return await wallet.getUsedAddresses();
     },
-  })
+  });
 
-  return { address, usedAddress, balance, rewardAddresses, policyId, utxos }
+  return {
+    address,
+    assest,
+    usedAddress,
+    balance,
+    rewardAddresses,
+    policyId,
+    utxos,
+  };
 }
 
-export default useUser
+export default useUser;

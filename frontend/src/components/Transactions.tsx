@@ -1,48 +1,90 @@
-import { useWallet } from '@meshsdk/react'
-import { MeshTxBuilder } from '@meshsdk/core'
-import { useMutation } from '@tanstack/react-query'
-import FormItem from './ui/FormItem'
-import { provider } from '@/utils/provider'
-import useUser from '@/hooks/useUser'
+import { useWallet } from "@meshsdk/react";
+import { MeshTxBuilder } from "@meshsdk/core";
+import { useMutation } from "@tanstack/react-query";
+import { useForm } from "react-hook-form";
+import FormItem from "./ui/FormItem";
+import useUser from "../hooks/useUser";
+import { provider } from "../utils/provider";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { TransactionForm, transactionValidator } from "../validations";
+import Button from "./ui/Button";
+import { toast } from "react-toastify";
 
 function Transactions() {
-  const { wallet } = useWallet()
-  const { address, utxos } = useUser()
+  const { wallet } = useWallet();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(transactionValidator),
+  });
+  const { address, utxos } = useUser();
+
   const txBuilder = new MeshTxBuilder({
     fetcher: provider,
     verbose: true,
-  })
+  });
 
-  const { mutate: handleSendTransaction, isPending } = useMutation({
-    mutationKey: ['/'],
-    mutationFn: async () => {
+  const {
+    mutate: handleSendTransaction,
+    isPending,
+    data: hash,
+  } = useMutation({
+    mutationKey: ["/"],
+    mutationFn: async (data: TransactionForm) => {
       try {
         const unsignedTx = await txBuilder
-          .txOut('addr_test1vpvx0sacufuypa2k4sngk7q40zc5c4npl337uusdh64kv0c7e4cxr', [
-            { unit: 'lovelace', quantity: '1000' },
+          .txOut(data.address, [
+            { unit: "lovelace", quantity: data.quantity.toString() },
           ])
           .changeAddress(address!)
           .selectUtxosFrom(utxos!)
-          .complete()
-        const signTx = await wallet.signTx(unsignedTx)
-        const txHash = await wallet.submitTx(signTx)
-        return txHash
+          .complete();
+        const signTx = await wallet.signTx(unsignedTx);
+        const txHash = await wallet.submitTx(signTx);
+        return txHash;
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
     },
-  })
+    onSuccess: (data) => {
+      if (data) {
+        toast.success("Transaction success");
+      } else {
+        toast.error("Transaction failed");
+      }
+    },
+    onError: () => {
+      toast.error("Transaction failed");
+    },
+  });
+
+  const onSubmit = (data: TransactionForm) => {
+    handleSendTransaction(data);
+  };
 
   return (
-    <div className='w-full flex flex-col bg-white p-3 rounded-2xl !shadow-[0_1px_8px_0_rgba(0,0,0,0.2)] gap-2.5'>
-      <div
-        className={`w-full text-center px-4 py-2 bg-primary text-white rounded-4xl cursor-pointer`}
-        onClick={() => handleSendTransaction()}
-      >
-        {isPending ? 'Sending...' : 'Send Transaction'}
-      </div>
-    </div>
-  )
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="w-full flex flex-col bg-white p-3 rounded-2xl !shadow-[0_1px_8px_0_rgba(0,0,0,0.2)] gap-2.5"
+    >
+      <FormItem
+        label="Address"
+        registration={register("address")}
+        error={errors.address?.message}
+      />
+      <FormItem
+        label="Quantity (ADA)"
+        type="number"
+        registration={register("quantity")}
+        error={errors.quantity?.message}
+      />
+
+      <Button>{isPending ? "Sending..." : "Send Transaction"}</Button>
+    </form>
+  );
 }
 
-export default Transactions
+export default Transactions;

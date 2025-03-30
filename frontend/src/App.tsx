@@ -1,9 +1,9 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 import { routers } from "./routes/routes";
 import QueryContext from "./context/QueryContext";
 import MeshContext from "./context/MeshContext";
 import Header from "./components/Header/Header";
-import "@meshsdk/react/styles.css";
 
 function App() {
   return (
@@ -11,6 +11,7 @@ function App() {
       <MeshContext>
         <BrowserRouter>
           <Header />
+          <ToastContainer pauseOnHover={false} />
           <Routes>
             <Route>
               {routers.map((route) => (
