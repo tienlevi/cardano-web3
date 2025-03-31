@@ -1,10 +1,10 @@
 use aiken/crypto.{VerificationKeyHash}
 
 pub type MintAction {
-    owner: ByteArray,
-    msg: ByteArray,
+  owner: ByteArray,
+  msg: ByteArray,
 }
 
 pub type MintTransaction {
-    extra_signatories: List<VerificationKeyHash>
+  extra_signatories: List<VerificationKeyHash>,
 }

@@ -1,3 +1,4 @@
-import { BlockfrostProvider } from '@meshsdk/core'
+import { BlockfrostProvider } from "@meshsdk/core";
+import { blockfrostApiKey } from "../constants";
 
-export const provider = new BlockfrostProvider('previewA8xh1LLIefDLZbtkZfmsMdTmmtadJZD1')
+export const provider = new BlockfrostProvider(blockfrostApiKey);

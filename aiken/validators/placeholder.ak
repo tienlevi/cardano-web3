@@ -48,12 +48,9 @@ validator markets {
     }
   }
 
-  mint(redeemer: MintAction, _policy_id: PolicyId, tx: MintTransaction) {
-    // Hardcoded public key hash (Blake2b-224 hash of a public key)
-    let authorized_key =
-      crypto.blake2b_224(
-        #"e09d36c79f0d6d6e9e5252e74fd9b9e1c4ea16b3e57bf71d33b4e723",
-      )
+  mint(redeemer: MintAction, policy_id: PolicyId, tx: MintTransaction) {
+    // Hardcoded public key hash (Blake2b-224 hash of a public key) 
+    let authorized_key = crypto.blake2b_224(policy_id)
     let is_signed = list.has(tx.extra_signatories, authorized_key)
     let valid_redeemer = redeemer.msg == "Mint Now"
     is_signed && valid_redeemer
@@ -99,13 +96,13 @@ test mint_action() {
   let redeemer =
     MintAction {
       owner: crypto.blake2b_224(
-        #"e09d36c79f0d6d6e9e5252e74fd9b9e1c4ea16b3e57bf71d33b4e723",
+        #"6213d54eac79892450e0125a0ced7a86711f0522b8b44e62f9e2b3ea",
       ),
       msg: "Mint Now",
     }
   let policy_id: PolicyId =
     crypto.blake2b_224(
-      #"e09d36c79f0d6d6e9e5252e74fd9b9e1c4ea16b3e57bf71d33b4e723",
+      #"6213d54eac79892450e0125a0ced7a86711f0522b8b44e62f9e2b3ea",
     )
   let tx = MintTransaction { extra_signatories: [redeemer.owner] }
   markets.mint(redeemer, policy_id, tx)
