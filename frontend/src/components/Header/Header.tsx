@@ -25,6 +25,12 @@ export default function Header() {
             <Link to="/mint" className="text-gray-600 hover:text-gray-900">
               Mint
             </Link>
+            <Link
+              to="/smart-contract"
+              className="text-gray-600 hover:text-gray-900"
+            >
+              Smart Contract
+            </Link>
           </nav>
 
           {/* Mobile menu button */}

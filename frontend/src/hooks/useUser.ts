@@ -1,22 +1,16 @@
-import { useAddress, useAssets, useWallet } from "@meshsdk/react";
+import { useAddress, useAssets, useLovelace, useWallet } from "@meshsdk/react";
 import { useQuery } from "@tanstack/react-query";
 
 function useUser() {
   const { wallet } = useWallet();
   const address = useAddress();
   const assest = useAssets();
+  const balance = useLovelace();
 
   const { data: utxos } = useQuery({
     queryKey: ["/"],
     queryFn: async () => {
       return await wallet.getUtxos();
-    },
-  });
-
-  const { data: balance } = useQuery({
-    queryKey: ["/"],
-    queryFn: async () => {
-      return await wallet.getBalance();
     },
   });
 

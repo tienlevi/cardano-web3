@@ -44,9 +44,7 @@ function ConnectWallet() {
               </div>
               <div className="px-4 py-2">
                 <div className="text-sm text-gray-600">Balance</div>
-                <div className="text-sm font-medium">
-                  {balance?.[0].quantity} {balance?.[0]?.unit}
-                </div>
+                <div className="text-sm font-medium">{balance}</div>
               </div>
               <div className="border-t border-gray-100 mt-2">
                 <button
