@@ -1,0 +1,126 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36" version="26.2.1">
+  <diagram id="C5RBs43oDa-KdzZeNtuy" name="Page-1">
+    <mxGraphModel dx="2189" dy="1928" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="WIyWlLk6GJQsqaUBKTNV-0" />
+        <mxCell id="WIyWlLk6GJQsqaUBKTNV-1" parent="WIyWlLk6GJQsqaUBKTNV-0" />
+        <mxCell id="hAlUFuvGdz0RrWYAjsD_-0" value="&lt;font style=&quot;font-size: 16px;&quot;&gt;Owner&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="80" y="440" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="hAlUFuvGdz0RrWYAjsD_-1" value="&lt;font style=&quot;font-size: 16px;&quot;&gt;Create Transaction gồm 1 UTXOs&lt;br&gt;Asset: 1 ADA&lt;/font&gt;&lt;div&gt;&lt;font style=&quot;font-size: 16px;&quot;&gt;Datum: VerificationKeyHash của owner&lt;/font&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="200" y="270" width="230" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="hAlUFuvGdz0RrWYAjsD_-2" value="&lt;font style=&quot;font-size: 16px;&quot;&gt;Create Transaction mở khoá 1 UTXOs&lt;br&gt;Asset: 1 ADA&lt;/font&gt;&lt;div&gt;&lt;font style=&quot;font-size: 16px;&quot;&gt;Redeemer: VerificationKeyHash của owner và message&lt;/font&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="-170" y="270" width="240" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="hAlUFuvGdz0RrWYAjsD_-3" value="&lt;font style=&quot;font-size: 16px;&quot;&gt;Smart&lt;br&gt;Contract&lt;/font&gt;" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="275" y="60" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="hAlUFuvGdz0RrWYAjsD_-5" value="&lt;font style=&quot;font-size: 16px;&quot;&gt;Nếu là giao dịch mở khoá output&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="242.5" y="-80" width="145" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="hAlUFuvGdz0RrWYAjsD_-6" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="hAlUFuvGdz0RrWYAjsD_-0" target="hAlUFuvGdz0RrWYAjsD_-1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="170" y="410" as="sourcePoint" />
+            <mxPoint x="220" y="360" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="hAlUFuvGdz0RrWYAjsD_-7" value="" style="endArrow=classic;html=1;rounded=0;exitX=0;exitY=0;exitDx=0;exitDy=0;entryX=0.75;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="hAlUFuvGdz0RrWYAjsD_-0" target="hAlUFuvGdz0RrWYAjsD_-2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="210" y="450" as="sourcePoint" />
+            <mxPoint x="325" y="400" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="hAlUFuvGdz0RrWYAjsD_-8" value="&lt;font style=&quot;font-size: 16px;&quot;&gt;Person&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="590" y="440" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="hAlUFuvGdz0RrWYAjsD_-9" value="&lt;font style=&quot;font-size: 16px;&quot;&gt;Create Transaction mở khoá UTXO bị khoá lên contract&lt;br&gt;Gồm: VerificationKeyHash của person&lt;/font&gt;&lt;div&gt;&lt;font style=&quot;font-size: 16px;&quot;&gt;Redeemer: message&lt;/font&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="540" y="270" width="230" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="hAlUFuvGdz0RrWYAjsD_-10" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="hAlUFuvGdz0RrWYAjsD_-8" target="hAlUFuvGdz0RrWYAjsD_-9">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="210" y="450" as="sourcePoint" />
+            <mxPoint x="325" y="400" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="hAlUFuvGdz0RrWYAjsD_-11" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="hAlUFuvGdz0RrWYAjsD_-2" target="hAlUFuvGdz0RrWYAjsD_-3">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="90" y="450" as="sourcePoint" />
+            <mxPoint x="20" y="400" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="hAlUFuvGdz0RrWYAjsD_-14" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;Unlock UTXO do owner khoá&lt;/font&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="hAlUFuvGdz0RrWYAjsD_-11">
+          <mxGeometry x="-0.1132" y="3" relative="1" as="geometry">
+            <mxPoint y="1" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="hAlUFuvGdz0RrWYAjsD_-12" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" target="hAlUFuvGdz0RrWYAjsD_-3">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="320" y="270" as="sourcePoint" />
+            <mxPoint x="675" y="130" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="hAlUFuvGdz0RrWYAjsD_-16" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;Lock UTXO vừa tạo&lt;/font&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="hAlUFuvGdz0RrWYAjsD_-12">
+          <mxGeometry x="-0.0162" y="-1" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="hAlUFuvGdz0RrWYAjsD_-13" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="hAlUFuvGdz0RrWYAjsD_-9" target="hAlUFuvGdz0RrWYAjsD_-3">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="330" y="280" as="sourcePoint" />
+            <mxPoint x="325" y="150" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="hAlUFuvGdz0RrWYAjsD_-20" value="&lt;span style=&quot;font-size: 14px;&quot;&gt;Unlock UTXO của person&lt;/span&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="hAlUFuvGdz0RrWYAjsD_-13">
+          <mxGeometry x="-0.0635" y="-3" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="hAlUFuvGdz0RrWYAjsD_-21" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="hAlUFuvGdz0RrWYAjsD_-3">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="317.5" y="110" as="sourcePoint" />
+            <mxPoint x="312.5" y="-20" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="hAlUFuvGdz0RrWYAjsD_-23" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" target="hAlUFuvGdz0RrWYAjsD_-24">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="312.5" y="-80" as="sourcePoint" />
+            <mxPoint x="313" y="-160" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="hAlUFuvGdz0RrWYAjsD_-24" value="&lt;span style=&quot;font-size: 16px;&quot;&gt;Kiểm tra chữ ký của owner&lt;/span&gt;&lt;div&gt;&lt;span style=&quot;font-size: 16px;&quot;&gt;Kiểm tra message&lt;/span&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="180" y="-270" width="270" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="hAlUFuvGdz0RrWYAjsD_-25" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="hAlUFuvGdz0RrWYAjsD_-24">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="322.5" y="-70" as="sourcePoint" />
+            <mxPoint x="580" y="-240" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="hAlUFuvGdz0RrWYAjsD_-26" value="" style="endArrow=classic;html=1;rounded=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" target="hAlUFuvGdz0RrWYAjsD_-3">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="580" y="-240" as="sourcePoint" />
+            <mxPoint x="590" y="-230" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="hAlUFuvGdz0RrWYAjsD_-27" value="" style="endArrow=classic;html=1;rounded=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="hAlUFuvGdz0RrWYAjsD_-24">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="460" y="-230" as="sourcePoint" />
+            <mxPoint x="32" y="-240" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="hAlUFuvGdz0RrWYAjsD_-28" value="" style="endArrow=classic;html=1;rounded=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" target="hAlUFuvGdz0RrWYAjsD_-0">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="30" y="-240" as="sourcePoint" />
+            <mxPoint x="-50" y="270" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="hAlUFuvGdz0RrWYAjsD_-29" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;Trả UTXO về ví person&lt;/font&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="hAlUFuvGdz0RrWYAjsD_-28">
+          <mxGeometry x="-0.042" y="-2" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
