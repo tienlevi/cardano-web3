@@ -1,5 +1,5 @@
 import { Routes } from "../interface/route";
-import Asset from "../pages/Asset";
+import SmartContract from "../pages/SmartContract";
 import Home from "../pages/Home";
 import Transaction from "../pages/Transaction";
 
@@ -17,9 +17,9 @@ export const routers: Routes[] = [
     element: <Transaction />,
   },
   {
-    href: "/asset",
-    id: "asset",
-    name: "Asset",
-    element: <Asset />,
+    href: "/smart-contract",
+    id: "smart-contract",
+    name: "Smart Contract",
+    element: <SmartContract />,
   },
 ];

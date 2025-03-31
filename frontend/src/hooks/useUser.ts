@@ -35,6 +35,13 @@ function useUser() {
     },
   });
 
+  const { data: colleteral } = useQuery({
+    queryKey: ["/"],
+    queryFn: async () => {
+      return await wallet.getCollateral();
+    },
+  });
+
   return {
     address,
     assest,
@@ -43,6 +50,7 @@ function useUser() {
     rewardAddresses,
     policyId,
     utxos,
+    colleteral,
   };
 }
 
