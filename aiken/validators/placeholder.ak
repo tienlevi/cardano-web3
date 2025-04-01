@@ -12,12 +12,10 @@ validator spend_money {
     _own_ref: OutputReference,
     self: Transaction,
   ) {
-    expect Some(Datum { owner, money, name }) = datum
-    let money = money == 2000
-    let name = name == "Tien"
+    expect Some(Datum { owner }) = datum
     let messsage = redeemer.msg == "Success"
     let signed = list.has(self.extra_signatories, owner)
-    messsage && signed && money && name
+    messsage && signed
   }
 
   else(_) {
@@ -62,25 +60,15 @@ validator markets {
 }
 
 test main() {
-  let datum =
-    Datum {
-      owner: #"00000000000000000000000000000000",
-      money: 2000,
-      name: "Tien",
-    }
-  let redeemer = Redeemer { msg: "Success", money: datum.money }
+  let datum = Datum { owner: #"00000000000000000000000000000000" }
+  let redeemer = Redeemer { msg: "Success" }
   let ref = OutputReference { transaction_id: "", output_index: 0 }
   let tx = Transaction { extra_signatories: [datum.owner] }
   spend_money.spend(Some(datum), redeemer, ref, tx)
 }
 
 test market_action() {
-  let datum =
-    Datum {
-      owner: #"00000000000000000000000000000000",
-      money: 2000,
-      name: "Tien",
-    }
+  let datum = Datum { owner: #"00000000000000000000000000000000" }
   let ref = OutputReference { transaction_id: "", output_index: 0 }
   let tx = Transaction { extra_signatories: [datum.owner] }
   let transfer =

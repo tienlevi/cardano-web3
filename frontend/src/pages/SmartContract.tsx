@@ -1,23 +1,60 @@
+import { useForm } from "react-hook-form";
 import { lockAsset, unlockAsset } from "../hooks/useAsset";
+import FormItem from "../components/ui/FormItem";
+
+interface Inputs {
+  quantity: string;
+  message: string;
+}
 
 function SmartContract() {
-  const { mutate: handleLockAsset } = lockAsset();
-  const { mutate: handleUnlockAsset } = unlockAsset();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<Inputs>();
+  const { mutate: handleLockAsset, isPending: loadingLockAsset } = lockAsset();
+  const { mutate: handleUnlockAsset, isPending: loadingUnlockAsset } =
+    unlockAsset();
+
+  const onSubmitLockAsset = (data: Inputs) => {
+    handleLockAsset(data);
+  };
 
   return (
     <div className="w-[500px] mx-auto h-screen flex flex-col justify-center items-center gap-5">
-      <div
+      <FormItem
+        type="number"
+        label="Quantity"
+        registration={register("quantity", {
+          required: "Must enter",
+          min: {
+            value: 1000000,
+            message: "quantity must be greater than or equal to 1000000",
+          },
+        })}
+        error={errors.quantity?.message}
+      />
+      <FormItem
+        type="text"
+        label="Message (Optional)"
+        registration={register("message")}
+        error={errors.message?.message}
+      />
+      <button
+        disabled={loadingLockAsset}
         className={`w-[180px] text-center px-4 py-2 bg-primary text-white rounded-4xl cursor-pointer`}
-        onClick={() => handleLockAsset()}
+        onClick={handleSubmit(onSubmitLockAsset)}
       >
-        Lock Asset
-      </div>
-      <div
+        {loadingLockAsset ? "Loading..." : "Lock Asset"}
+      </button>
+      <button
+        disabled={loadingUnlockAsset}
         className={`w-[180px] text-center px-4 py-2 bg-primary text-white rounded-4xl cursor-pointer`}
         onClick={() => handleUnlockAsset()}
       >
-        Unlock Asset
-      </div>
+        {loadingUnlockAsset ? "Loading..." : "Unlock Asset"}
+      </button>
     </div>
   );
 }

@@ -1,86 +1,89 @@
 import {
-  deserializeAddress,
+  mConStr0,
   MeshTxBuilder,
+  resolveDataHash,
   serializePlutusScript,
-  Transaction,
 } from "@meshsdk/core";
-import { useMutation } from "@tanstack/react-query";
-import type { Data, PlutusScript } from "@meshsdk/core";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import type { PlutusScript } from "@meshsdk/core";
 import { useWallet } from "@meshsdk/react";
-import cbor from "cbor";
 import plutusScript from "../data/plutus.json";
-import { provider } from "../utils/provider";
 import useUser from "./useUser";
+import { provider } from "../utils/provider";
 
 export function lockAsset() {
   const { wallet } = useWallet();
-  const { address } = useUser();
-
-  const { pubKeyHash: hash } = deserializeAddress(
-    address ??
-      "addr_test1qrlawvv4580q9vm8eegjz9sgd4msaxzdjpqhelhnjlk73cc0qt2c8lrpldzeqk2khz7qju955hfedm6jf8wsh5kltgmq0fvp29"
-  );
-
+  const { address, utxos } = useUser();
   const script: PlutusScript = {
-    code: plutusScript.validators[0].compiledCode,
+    code: plutusScript.validators[3].compiledCode,
     version: "V2",
   };
-
-  const datum: Data = {
-    alternative: 0,
-    fields: [hash ?? ""],
-  };
-
   const { address: scriptAddress } = serializePlutusScript(script);
-  const tx = new Transaction({ initiator: wallet, verbose: true }).sendLovelace(
-    { address: scriptAddress, datum: { value: datum } },
-    "1000000"
-  );
+  const txBuilder = new MeshTxBuilder({
+    fetcher: provider,
+    verbose: true,
+  });
 
   return useMutation({
     mutationKey: ["/lockAsset"],
-    mutationFn: async () => {
-      try {
-        const unsignedTx = await tx.build();
-        const signedTx = await wallet.signTx(unsignedTx);
-        const txHash = await wallet.submitTx(signedTx);
-        console.log(txHash);
-        return txHash;
-      } catch (error) {
-        console.log(error);
-      }
+    mutationFn: async (data: any) => {
+      const unsignedTx = await txBuilder
+        .txOut(scriptAddress, [
+          {
+            unit: "lovelace",
+            quantity: data.quantity,
+          },
+        ])
+        .txOutDatumHashValue(
+          mConStr0(["54024b74df12e1640911614896981b29eebd22c14e0745e382b05cba"])
+        )
+        .changeAddress(address!)
+        .selectUtxosFrom(utxos!)
+        .complete();
+
+      const signedTx = await wallet.signTx(unsignedTx);
+      const txHash = await wallet.submitTx(signedTx);
+      console.log(txHash);
+      return txHash;
     },
   });
 }
 
 export function unlockAsset() {
   const { wallet } = useWallet();
+  const { address, collateral, utxos } = useUser();
   const script: PlutusScript = {
-    code: cbor
-      .encode(Buffer.from(plutusScript.validators[0].compiledCode, "hex"))
-      .toString("hex"),
+    code: plutusScript.validators[3].compiledCode,
     version: "V2",
   };
   const { address: scriptAddress } = serializePlutusScript(script);
-  const tx = new MeshTxBuilder({ fetcher: provider, verbose: true });
+
+  const txBuilder = new MeshTxBuilder({
+    fetcher: provider,
+    verbose: true,
+  });
 
   return useMutation({
     mutationKey: ["/"],
     mutationFn: async () => {
       try {
-        const unsignedTx = await tx
+        const unsignedTx = await txBuilder
           .spendingPlutusScriptV2()
-          .txIn("6213d54eac79892450e0125a0ced7a86711f0522b8b44e62f9e2b3ea", 0)
+          .txIn(utxos?.[0]?.input?.txHash!, utxos?.[0]?.input?.outputIndex!)
           .txInInlineDatumPresent()
-          .txInRedeemerValue(plutusScript, "JSON")
-          .spendingTxInReference(
-            "6213d54eac79892450e0125a0ced7a86711f0522b8b44e62f9e2b3ea",
-            0
+          .txInScript(script.code)
+          .txInRedeemerValue(mConStr0([]))
+          .changeAddress(address!)
+          .txInCollateral(
+            collateral?.[0]?.input.txHash!,
+            collateral?.[0]?.input.outputIndex!,
+            collateral?.[0]?.output.amount!,
+            collateral?.[0]?.output.address!
           )
+          .selectUtxosFrom(utxos!)
           .complete();
         const signedTx = await wallet.signTx(unsignedTx);
         const txHash = await wallet.submitTx(signedTx);
-        console.log(txHash);
         return txHash;
       } catch (error) {
         console.log(error);

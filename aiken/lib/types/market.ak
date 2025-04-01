@@ -2,13 +2,10 @@ use aiken/crypto.{VerificationKeyHash}
 
 pub type Datum {
   owner: VerificationKeyHash,
-  money: Int,
-  name: ByteArray,
 }
 
 pub type Redeemer {
   msg: ByteArray,
-  money: Int,
 }
 
 pub type RedeemerMint {

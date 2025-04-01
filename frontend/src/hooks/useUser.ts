@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 function useUser() {
   const { wallet } = useWallet();
   const address = useAddress();
-  const assest = useAssets();
+  const asset = useAssets();
   const balance = useLovelace();
 
   const { data: utxos } = useQuery({
@@ -35,7 +35,7 @@ function useUser() {
     },
   });
 
-  const { data: colleteral } = useQuery({
+  const { data: collateral } = useQuery({
     queryKey: ["/"],
     queryFn: async () => {
       return await wallet.getCollateral();
@@ -44,13 +44,13 @@ function useUser() {
 
   return {
     address,
-    assest,
+    asset,
     usedAddress,
     balance,
     rewardAddresses,
     policyId,
     utxos,
-    colleteral,
+    collateral,
   };
 }
 
