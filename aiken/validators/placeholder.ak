@@ -5,7 +5,7 @@ use cardano/transaction.{OutputReference}
 use types/market.{Buy, Datum, Market, Redeemer, Sell, Transaction}
 use types/mint.{MintAction, MintTransaction}
 
-validator spend_money {
+validator smart_contract {
   spend(
     datum: Option<Datum>,
     redeemer: Redeemer,
@@ -13,7 +13,7 @@ validator spend_money {
     self: Transaction,
   ) {
     expect Some(Datum { owner }) = datum
-    let messsage = redeemer.msg == "Success"
+    let messsage = redeemer.msg == "Hello world"
     let signed = list.has(self.extra_signatories, owner)
     messsage && signed
   }
@@ -64,7 +64,7 @@ test main() {
   let redeemer = Redeemer { msg: "Success" }
   let ref = OutputReference { transaction_id: "", output_index: 0 }
   let tx = Transaction { extra_signatories: [datum.owner] }
-  spend_money.spend(Some(datum), redeemer, ref, tx)
+  smart_contract.spend(Some(datum), redeemer, ref, tx)
 }
 
 test market_action() {

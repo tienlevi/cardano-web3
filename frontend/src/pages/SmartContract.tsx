@@ -13,7 +13,11 @@ function SmartContract() {
     handleSubmit,
     formState: { errors },
   } = useForm<Inputs>();
-  const { mutate: handleLockAsset, isPending: loadingLockAsset } = lockAsset();
+  const {
+    handleLockAsset,
+    isPending: loadingLockAsset,
+    dataHash,
+  } = lockAsset();
   const { mutate: handleUnlockAsset, isPending: loadingUnlockAsset } =
     unlockAsset();
 
@@ -48,6 +52,16 @@ function SmartContract() {
       >
         {loadingLockAsset ? "Loading..." : "Lock Asset"}
       </button>
+      <div>{dataHash}</div>
+      {dataHash && (
+        <button
+          disabled={loadingUnlockAsset}
+          className={`w-[180px] text-center px-4 py-2 bg-primary text-white rounded-4xl cursor-pointer`}
+          onClick={() => handleUnlockAsset()}
+        >
+          {loadingUnlockAsset ? "Loading..." : "Unlock Asset"}
+        </button>
+      )}
       <button
         disabled={loadingUnlockAsset}
         className={`w-[180px] text-center px-4 py-2 bg-primary text-white rounded-4xl cursor-pointer`}
