@@ -1,4 +1,5 @@
 import {
+  deserializeAddress,
   mConStr0,
   MeshTxBuilder,
   resolveDataHash,
@@ -70,6 +71,9 @@ function useAsset() {
     useMutation({
       mutationKey: ["/unlockAsset"],
       mutationFn: async () => {
+        const { pubKeyHash: beneficiaryPubKeyHash } = deserializeAddress(
+          "addr_test1qrlawvv4580q9vm8eegjz9sgd4msaxzdjpqhelhnjlk73cc0qt2c8lrpldzeqk2khz7qju955hfedm6jf8wsh5kltgmq0fvp29"
+        );
         try {
           const txHash = utxo?.inputs?.[0].tx_hash;
           const outputIndex = utxo?.inputs?.[0].output_index;
@@ -77,13 +81,20 @@ function useAsset() {
           const unsignedTx = await txBuilder
             .spendingPlutusScriptV3()
             .txIn(txHash!, outputIndex!)
+            .txOut(
+              "ad736280519bf1355151c08cac743316344c7d373feffc689e2f14c4162696f5",
+              [{ unit: "lovelace", quantity: "1" }]
+            )
             .txInInlineDatumPresent()
             .spendingTxInReference(txHash!, outputIndex!)
+            .spendingReferenceTxInInlineDatumPresent()
+            .spendingReferenceTxInRedeemerValue(beneficiaryPubKeyHash)
             .txInDatumValue(mConStr0([]))
             .txInRedeemerValue(mConStr0([]))
             .changeAddress(address!)
             .selectUtxosFrom(utxos!)
             .complete();
+
           const signedTx = await wallet.signTx(unsignedTx, true);
           const submittedTxHash = await wallet.submitTx(signedTx);
           console.log("Transaction submitted:", submittedTxHash);
