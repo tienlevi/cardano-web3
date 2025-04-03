@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import { lockAsset, unlockAsset } from "../hooks/useAsset";
+import useAsset from "../hooks/useAsset";
 import FormItem from "../components/ui/FormItem";
 
 interface Inputs {
@@ -15,11 +15,11 @@ function SmartContract() {
   } = useForm<Inputs>();
   const {
     handleLockAsset,
-    isPending: loadingLockAsset,
+    handleUnlockAsset,
+    loadingUnlockAsset,
+    loadingLockAsset,
     dataHash,
-  } = lockAsset();
-  const { mutate: handleUnlockAsset, isPending: loadingUnlockAsset } =
-    unlockAsset();
+  } = useAsset();
 
   const onSubmitLockAsset = (data: Inputs) => {
     handleLockAsset(data);

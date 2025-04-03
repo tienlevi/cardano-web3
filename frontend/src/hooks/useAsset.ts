@@ -3,37 +3,53 @@ import {
   MeshTxBuilder,
   resolveDataHash,
   serializePlutusScript,
-  stringToHex,
 } from "@meshsdk/core";
-import { useMutation } from "@tanstack/react-query";
-import type { PlutusScript, UTxO } from "@meshsdk/core";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import type { PlutusScript } from "@meshsdk/core";
 import { useWallet } from "@meshsdk/react";
-import plutusScript from "../data/plutus.json";
+import plutusScript from "@/data/plutus.json";
 import useUser from "./useUser";
-import { provider } from "../utils/provider";
+import { provider } from "@/utils/provider";
 import { useState } from "react";
+import { getTransactionUtxos } from "@/services/transaction";
+import { TransactionUTXO } from "@/interface/utxo";
 
 const script: PlutusScript = {
   code: plutusScript.validators[0].compiledCode,
   version: "V3",
 };
+const { address: scriptAddress } = serializePlutusScript(script);
 
-export function lockAsset() {
+function useAsset() {
   const { wallet } = useWallet();
   const [dataHash, setDataHash] = useState<string>("");
-  const { address, utxos, asset } = useUser();
-  const { address: scriptAddress } = serializePlutusScript(script);
+  const { address, utxos } = useUser();
   const txBuilder = new MeshTxBuilder({
     fetcher: provider,
     verbose: true,
   });
-  const { mutate: handleLockAsset, ...rest } = useMutation({
+  const hash =
+    "ba5927c81f0908012224d3598c6f36038b6beaabf8c94e7f2ad8e86e3a74a5e5";
+
+  const { data: utxo } = useQuery<TransactionUTXO>({
+    queryKey: [`/txs/${hash}/utxos`],
+    queryFn: async () => {
+      const utxos = await getTransactionUtxos(hash);
+      const dataHashs = resolveDataHash(dataHash);
+
+      const utxo = utxos.outputs.find((u: any) => u.data_hash === dataHashs);
+
+      return utxo;
+    },
+  });
+
+  const { mutate: handleLockAsset, isPending: loadingLockAsset } = useMutation({
     mutationKey: ["/lockAsset"],
     mutationFn: async (data: any) => {
       const unsignedTx = await txBuilder
         .txOut(scriptAddress, [
           {
-            unit: "d68ddaf25a80b74aefd4ece2741b6189b97a9c29d462b492d6369ebfe240e289",
+            unit: "lovelace",
             quantity: data.quantity,
           },
         ])
@@ -48,59 +64,43 @@ export function lockAsset() {
     },
   });
 
-  return { handleLockAsset, dataHash, ...rest };
-}
+  console.log(utxo);
 
-export function unlockAsset() {
-  const { wallet } = useWallet();
-  const { address, collateral, utxos } = useUser();
-  const txBuilder = new MeshTxBuilder({
-    fetcher: provider,
-    verbose: true,
-  });
-  console.log(utxos);
+  const { mutate: handleUnlockAsset, isPending: loadingUnlockAsset } =
+    useMutation({
+      mutationKey: ["/unlockAsset"],
+      mutationFn: async () => {
+        try {
+          const txHash = utxo?.inputs?.[0].tx_hash;
+          const outputIndex = utxo?.inputs?.[0].output_index;
 
-  const getAssetUtxo = async (scriptAddress: any, datum: any) => {
-    const utxos = await provider.fetchAddressUTxOs(scriptAddress);
-    const dataHash = resolveDataHash(datum);
+          const unsignedTx = await txBuilder
+            .spendingPlutusScriptV3()
+            .txIn(txHash!, outputIndex!)
+            .txInInlineDatumPresent()
+            .spendingTxInReference(txHash!, outputIndex!)
+            .txInDatumValue(mConStr0([]))
+            .txInRedeemerValue(mConStr0([]))
+            .changeAddress(address!)
+            .selectUtxosFrom(utxos!)
+            .complete();
+          const signedTx = await wallet.signTx(unsignedTx, true);
+          const submittedTxHash = await wallet.submitTx(signedTx);
+          console.log("Transaction submitted:", submittedTxHash);
+          return submittedTxHash;
+        } catch (error) {
+          console.log(error);
+        }
+      },
+    });
 
-    const utxo = utxos.find((u) => u.output.dataHash === dataHash);
-    return utxo;
+  return {
+    handleLockAsset,
+    handleUnlockAsset,
+    loadingLockAsset,
+    loadingUnlockAsset,
+    dataHash,
   };
-
-  return useMutation({
-    mutationKey: ["/"],
-    mutationFn: async () => {
-      try {
-        const utxo = await getAssetUtxo(address, "Hello world");
-        const unsignedTx = await txBuilder
-          .spendingPlutusScriptV3()
-          .txIn(
-            utxos?.[0]?.input?.txHash!,
-            utxos?.[0]?.input?.outputIndex!,
-            utxos?.[0]?.output?.amount!,
-            utxos?.[0]?.output?.address!
-          )
-          .txInInlineDatumPresent()
-          .txInScript(script.code)
-          .txInDatumValue(mConStr0([stringToHex("Hello world")]))
-          .txInRedeemerValue(mConStr0([utxos?.[0]?.input?.txHash!]))
-          .changeAddress(address!)
-          .txInCollateral(
-            collateral?.[0]?.input.txHash!,
-            collateral?.[0]?.input.outputIndex!,
-            collateral?.[0]?.output.amount!,
-            collateral?.[0]?.output.address!
-          )
-          .selectUtxosFrom(utxos!)
-          .complete();
-        const signedTx = await wallet.signTx(unsignedTx, true);
-        const txHash = await wallet.submitTx(signedTx);
-        console.log(txHash);
-        return txHash;
-      } catch (error) {
-        console.log(error);
-      }
-    },
-  });
 }
+
+export default useAsset;
