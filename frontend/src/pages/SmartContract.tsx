@@ -27,6 +27,7 @@ function SmartContract() {
 
   return (
     <div className="w-[500px] mx-auto h-screen flex flex-col justify-center items-center gap-5">
+      <div className="text-[30px] font-bold text-center">Smart contract</div>
       <div className="w-full flex flex-col bg-white p-3 rounded-2xl !shadow-[0_1px_8px_0_rgba(0,0,0,0.2)] gap-2.5">
         <FormItem
           type="number"

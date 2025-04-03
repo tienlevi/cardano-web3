@@ -76,10 +76,10 @@ export function unlockAsset() {
         const unsignedTx = await txBuilder
           .spendingPlutusScriptV3()
           .txIn(
-            utxo?.input?.txHash!,
-            utxo?.input?.outputIndex!,
-            utxo?.output?.amount!,
-            utxo?.output?.address!
+            utxos?.[0]?.input?.txHash!,
+            utxos?.[0]?.input?.outputIndex!,
+            utxos?.[0]?.output?.amount!,
+            utxos?.[0]?.output?.address!
           )
           .txInInlineDatumPresent()
           .txInScript(script.code)

@@ -31,6 +31,9 @@ export default function Header() {
             >
               Smart Contract
             </Link>
+            <Link to="/vesting" className="text-gray-600 hover:text-gray-900">
+              Vesting
+            </Link>
           </nav>
 
           {/* Mobile menu button */}
