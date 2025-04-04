@@ -47,10 +47,10 @@ function useVesting() {
     mutationKey: ["/"],
     mutationFn: async (data: any) => {
       const { pubKeyHash: beneficiaryPubKeyHash } = deserializeAddress(
-        data.address
+        "addr_test1xznnmfk43w5cag3m7e9nnfe0wcsg5lx8afv4u9utjk3zxvqgu4azgw9mz5090zfp8jyzhju5kcqtm2cjnr4a3nxm8fxsntlvsu"
       );
       try {
-        const lockUntil = new Date(2025, 4, 2, 22, 10).getTime();
+        const lockUntil = new Date(2025, 4, 4, 22, 25).getTime();
         const tx = await txBuilder
           .txOut(scriptAddress, [{ unit: "lovelace", quantity: data.quantity }])
           .txOutInlineDatumValue(
@@ -75,12 +75,9 @@ function useVesting() {
 
   const { mutate: handleWithdraw, isPending: loadingWithdraw } = useMutation({
     mutationKey: ["/"],
-    mutationFn: async (data: any) => {
-      const txHash =
-        txHashDeposit ||
-        "b5ef4f074eb6052368f2b009a662a710b783bbeecba6b7821eb7a61df2c80ea7";
+    mutationFn: async () => {
+      const txHash = txHashDeposit;
       const utxos = await provider.fetchUTxOs(txHash);
-      const { pubKeyHash: beneficiaryPubKeyHash } = deserializeAddress(data);
 
       try {
         const datum = deserializeDatum<VestingDatum>(
@@ -90,34 +87,35 @@ function useVesting() {
           unixTimeToEnclosingSlot(
             Math.min(
               Number(datum.fields[0].int),
-              new Date(2025, 4, 2, 23, 50).getTime()
+              new Date(2025, 4, 5, 23, 50).getTime()
             ),
             SLOT_CONFIG_NETWORK.preview
           ) + 1;
         const tx = await txBuilder
+          .setNetwork("preview")
           .spendingPlutusScriptV3()
           .txIn(
-            utxos?.[0].input.txHash,
-            utxos?.[0].input.outputIndex,
-            utxos?.[0].output.amount,
-            "addr_test1wrznndsp9kussem2qacjnutfszsv2u50wsdqq5338ltmkxggwxqgw"
+            utxos[0].input.txHash,
+            utxos[0].input.outputIndex,
+            utxos[0].output.amount,
+            scriptAddress
           )
-          .txInCollateral(
-            collateral?.[0].input.txHash!,
-            collateral?.[0].input.outputIndex!,
-            collateral?.[0].output.amount,
-            collateral?.[0].output.address
-          )
-          .txOut(address!, [{ unit: "lovelace", quantity: "1" }])
-          .requiredSignerHash(beneficiaryPubKeyHash)
-          .changeAddress(address!)
-          .invalidBefore(invalid)
           .spendingReferenceTxInInlineDatumPresent()
           .spendingReferenceTxInRedeemerValue("")
           .txInScript(script.code)
+          .txOut(address!, [])
+          .txInCollateral(
+            collateral?.[0]?.input.txHash!,
+            collateral?.[0]?.input.outputIndex!,
+            collateral?.[0]?.output.amount,
+            collateral?.[0]?.output.address
+          )
+          .invalidBefore(invalid)
+          .requiredSignerHash(ownerPubKeyHash)
+          .changeAddress(address!)
+          .selectUtxosFrom(utxos)
           .complete();
-        // a5010102583900ffd73195a1de02b367ce512116086d770e984d90417cfef397ede8e30f02d583fc61fb45905956b8bc0970b4a5d396ef5249dd0bd2df5a360327200621582085e94c8c577b210e1944e49c8bf3f5058324b6b09fd311552a34e930309abb42
-        const signedTx = await wallet.signTx(tx);
+        const signedTx = await wallet.signTx(tx, true);
         const txHash = await wallet.submitTx(signedTx);
         console.log(txHash);
         toast.success("Withdraw success");

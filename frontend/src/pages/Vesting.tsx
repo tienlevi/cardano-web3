@@ -58,11 +58,7 @@ function Vesting() {
         {/* {txHashDeposit && ( */}
         <button
           type="submit"
-          onClick={() =>
-            handleWithdraw(
-              "addr_test1wrznndsp9kussem2qacjnutfszsv2u50wsdqq5338ltmkxggwxqgw"
-            )
-          }
+          onClick={() => handleWithdraw()}
           disabled={loadingWithdraw}
           className={`w-full text-center px-4 py-2 bg-primary text-white rounded-4xl cursor-pointer`}
         >
