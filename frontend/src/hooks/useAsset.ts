@@ -2,18 +2,16 @@ import {
   deserializeAddress,
   mConStr0,
   MeshTxBuilder,
-  resolveDataHash,
   serializePlutusScript,
 } from "@meshsdk/core";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import type { PlutusScript } from "@meshsdk/core";
 import { useWallet } from "@meshsdk/react";
 import plutusScript from "@/data/plutus.json";
 import useUser from "./useUser";
 import { provider } from "@/utils/provider";
 import { useState } from "react";
-import { getTransactionUtxos } from "@/services/transaction";
-import { TransactionUTXO } from "@/interface/utxo";
+import { toast } from "react-toastify";
 
 const script: PlutusScript = {
   code: plutusScript.validators[0].compiledCode,
@@ -24,24 +22,11 @@ const { address: scriptAddress } = serializePlutusScript(script);
 function useAsset() {
   const { wallet } = useWallet();
   const [dataHash, setDataHash] = useState<string>("");
-  const { address, utxos } = useUser();
+  const { address, utxos, collateral } = useUser();
   const txBuilder = new MeshTxBuilder({
     fetcher: provider,
+    submitter: provider,
     verbose: true,
-  });
-  const hash =
-    "ba5927c81f0908012224d3598c6f36038b6beaabf8c94e7f2ad8e86e3a74a5e5";
-
-  const { data: utxo } = useQuery<TransactionUTXO>({
-    queryKey: [`/txs/${hash}/utxos`],
-    queryFn: async () => {
-      const utxos = await getTransactionUtxos(hash);
-      const dataHashs = resolveDataHash(dataHash);
-
-      const utxo = utxos.outputs.find((u: any) => u.data_hash === dataHashs);
-
-      return utxo;
-    },
   });
 
   const { mutate: handleLockAsset, isPending: loadingLockAsset } = useMutation({
@@ -54,55 +39,64 @@ function useAsset() {
             quantity: data.quantity,
           },
         ])
+        .txOutInlineDatumValue(plutusScript.validators[0].hash)
         .txOutDatumHashValue(mConStr0([plutusScript.validators[0].hash]))
         .changeAddress(address!)
         .selectUtxosFrom(utxos!)
         .complete();
-
+      toast.success("Lock success");
       const signedTx = await wallet.signTx(unsignedTx);
       const txHash = await wallet.submitTx(signedTx);
       setDataHash(txHash);
     },
   });
 
-  console.log(utxo);
+  async function getUtxoByTxHash(txHash: string) {
+    const utxos = await provider.fetchUTxOs(txHash);
+    if (utxos.length === 0) {
+      throw new Error("UTxO not found");
+    }
+    return utxos[0];
+  }
 
   const { mutate: handleUnlockAsset, isPending: loadingUnlockAsset } =
     useMutation({
       mutationKey: ["/unlockAsset"],
       mutationFn: async () => {
-        const { pubKeyHash: beneficiaryPubKeyHash } = deserializeAddress(
-          "addr_test1qrlawvv4580q9vm8eegjz9sgd4msaxzdjpqhelhnjlk73cc0qt2c8lrpldzeqk2khz7qju955hfedm6jf8wsh5kltgmq0fvp29"
+        const signerHash = deserializeAddress(address!).pubKeyHash;
+        const scriptUtxo = await getUtxoByTxHash(
+          "5f20feff9cf52a14ff41506b9fdac4e44da1c9edb6faaaeee0da0e0eecd268ee"
         );
-        try {
-          const txHash = utxo?.inputs?.[0].tx_hash;
-          const outputIndex = utxo?.inputs?.[0].output_index;
-
-          const unsignedTx = await txBuilder
-            .spendingPlutusScriptV3()
-            .txIn(txHash!, outputIndex!)
-            .txOut(
-              "ad736280519bf1355151c08cac743316344c7d373feffc689e2f14c4162696f5",
-              [{ unit: "lovelace", quantity: "1" }]
-            )
-            .txInInlineDatumPresent()
-            .spendingTxInReference(txHash!, outputIndex!)
-            .spendingReferenceTxInInlineDatumPresent()
-            .spendingReferenceTxInRedeemerValue(beneficiaryPubKeyHash)
-            .txInDatumValue(mConStr0([]))
-            .txInRedeemerValue(mConStr0([]))
-            .changeAddress(address!)
-            .selectUtxosFrom(utxos!)
-            .complete();
-
-          const signedTx = await wallet.signTx(unsignedTx, true);
-          const submittedTxHash = await wallet.submitTx(signedTx);
-          console.log("Transaction submitted:", submittedTxHash);
-          return submittedTxHash;
-        } catch (error) {
-          console.log(error);
-        }
+        const txBuilderInstance = txBuilder
+          .setNetwork("preview")
+          .spendingPlutusScriptV3()
+          .txIn(
+            scriptUtxo.input.txHash,
+            scriptUtxo.input.outputIndex,
+            scriptUtxo.output.amount,
+            scriptUtxo.output.address
+          )
+          .txInScript(script.code)
+          .txInRedeemerValue({ alternative: 0, fields: ["Hello world"] })
+          .txInInlineDatumPresent()
+          .txInDatumValue(mConStr0([plutusScript.validators[0].hash]))
+          .requiredSignerHash(signerHash)
+          .changeAddress(address!)
+          .txInCollateral(
+            collateral?.[0].input.txHash!,
+            collateral?.[0].input.outputIndex!,
+            collateral?.[0].output.amount,
+            collateral?.[0].output.address
+          )
+          .selectUtxosFrom(utxos!);
+        const unsignedTx = await txBuilderInstance.complete();
+        const signedTx = await wallet.signTx(unsignedTx, true);
+        const txHash = await wallet.submitTx(signedTx);
+        toast.success("Unlock success");
+        console.log("Unlock Tx Hash:", txHash);
+        return txHash;
       },
+      onError: (error) => console.log(error),
     });
 
   return {
