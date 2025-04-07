@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { MeshVestingContract, VestingDatum } from "@meshsdk/contract";
+import { useState } from "react";
+import { VestingDatum } from "@meshsdk/contract";
 import {
   deserializeAddress,
   deserializeDatum,
@@ -16,7 +16,7 @@ import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import vestingScript from "../data/vesting.json";
 import useUser from "./useUser";
-import { getTimes } from "../utils/time";
+import { WithdrawForm } from "@/validations";
 
 const script: PlutusScript = {
   code: vestingScript.validators[0].compiledCode,
@@ -31,32 +31,29 @@ function useVesting() {
     fetcher: provider,
     submitter: provider,
   });
-  const contract = new MeshVestingContract({
-    mesh: txBuilder as any,
-    fetcher: provider,
-    wallet: wallet,
-    networkId: 0,
-  });
+
   const { address: scriptAddress } = serializePlutusScript(script);
-  const { pubKeyHash: ownerPubKeyHash } = deserializeAddress(
-    address! ||
-      "addr_test1qrlawvv4580q9vm8eegjz9sgd4msaxzdjpqhelhnjlk73cc0qt2c8lrpldzeqk2khz7qju955hfedm6jf8wsh5kltgmq0fvp29"
-  );
 
   const { mutate: handleDeposit, isPending: loadingDeposit } = useMutation({
     mutationKey: ["/"],
-    mutationFn: async (data: any) => {
+    mutationFn: async (data: WithdrawForm) => {
       const { pubKeyHash: beneficiaryPubKeyHash } = deserializeAddress(
-        "addr_test1xznnmfk43w5cag3m7e9nnfe0wcsg5lx8afv4u9utjk3zxvqgu4azgw9mz5090zfp8jyzhju5kcqtm2cjnr4a3nxm8fxsntlvsu"
+        data.beneficiaryAddress
+      );
+      const { pubKeyHash: ownerPubKeyHash } = deserializeAddress(
+        data.ownerAddress
       );
       try {
-        const lockUntil = new Date(2025, 4, 4, 22, 25).getTime();
+        const lockUntil = new Date(2025, 3, 7, 10, 25).getTime();
         const tx = await txBuilder
-          .txOut(scriptAddress, [{ unit: "lovelace", quantity: data.quantity }])
+          .setNetwork("preview")
+          .txOut(scriptAddress, [
+            { unit: "lovelace", quantity: data.quantity.toString() },
+          ])
           .txOutInlineDatumValue(
             mConStr0([lockUntil, ownerPubKeyHash, beneficiaryPubKeyHash])
           )
-          .changeAddress(address!)
+          .changeAddress(data.ownerAddress!)
           .selectUtxosFrom(utxos!)
           .complete();
         const signedTx = await wallet.signTx(tx);
@@ -69,35 +66,36 @@ function useVesting() {
       }
     },
   });
-  useEffect(() => {
-    getTimes(new Date(2025, 4, 2, 22, 10).getTime());
-  }, []);
 
   const { mutate: handleWithdraw, isPending: loadingWithdraw } = useMutation({
     mutationKey: ["/"],
-    mutationFn: async () => {
-      const txHash = txHashDeposit;
-      const utxos = await provider.fetchUTxOs(txHash);
+    mutationFn: async (data: WithdrawForm) => {
+      const fetchUtxos = await provider.fetchUTxOs(
+        "e12245c4bfb553cb09263eb1862d9e3a46e9009aac790c203c44fa102fb50ade"
+      );
 
+      const { pubKeyHash: ownerPubKeyHash } = deserializeAddress(
+        data.beneficiaryAddress
+      );
       try {
         const datum = deserializeDatum<VestingDatum>(
-          utxos?.[0]?.output.plutusData!
+          fetchUtxos?.[0]?.output.plutusData!
         );
-        const invalid =
-          unixTimeToEnclosingSlot(
-            Math.min(
-              Number(datum.fields[0].int),
-              new Date(2025, 4, 5, 23, 50).getTime()
-            ),
-            SLOT_CONFIG_NETWORK.preview
-          ) + 1;
+        const invalid = unixTimeToEnclosingSlot(
+          Math.min(
+            Number(datum.fields[0].int),
+            new Date(2025, 3, 7, 23, 50).getTime()
+          ),
+          SLOT_CONFIG_NETWORK.preview
+        );
+
         const tx = await txBuilder
           .setNetwork("preview")
           .spendingPlutusScriptV3()
           .txIn(
-            utxos[0].input.txHash,
-            utxos[0].input.outputIndex,
-            utxos[0].output.amount,
+            fetchUtxos[0].input.txHash,
+            fetchUtxos[0].input.outputIndex,
+            fetchUtxos[0].output.amount,
             scriptAddress
           )
           .spendingReferenceTxInInlineDatumPresent()
@@ -113,7 +111,7 @@ function useVesting() {
           .invalidBefore(invalid)
           .requiredSignerHash(ownerPubKeyHash)
           .changeAddress(address!)
-          .selectUtxosFrom(utxos)
+          .selectUtxosFrom(fetchUtxos)
           .complete();
         const signedTx = await wallet.signTx(tx, true);
         const txHash = await wallet.submitTx(signedTx);

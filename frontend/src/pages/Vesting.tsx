@@ -2,25 +2,24 @@ import FormItem from "../components/ui/FormItem";
 import { useForm } from "react-hook-form";
 import useVesting from "../hooks/useVesting";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { transactionValidator } from "../validations";
+import { WithdrawForm, withdrawValidator } from "../validations";
 
 function Vesting() {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({ resolver: yupResolver(transactionValidator) });
+  } = useForm({ resolver: yupResolver(withdrawValidator) });
 
-  const {
-    handleDeposit,
-    loadingDeposit,
-    txHashDeposit,
-    handleWithdraw,
-    loadingWithdraw,
-  } = useVesting();
+  const { handleDeposit, loadingDeposit, handleWithdraw, loadingWithdraw } =
+    useVesting();
 
-  const onSubmit = (data: any) => {
+  const onSubmitDeposit = (data: WithdrawForm) => {
     handleDeposit(data);
+  };
+
+  const onSubmitWithdraw = (data: WithdrawForm) => {
+    handleWithdraw(data);
   };
 
   return (
@@ -29,11 +28,19 @@ function Vesting() {
       <div className="w-full flex flex-col bg-white p-3 rounded-2xl !shadow-[0_1px_8px_0_rgba(0,0,0,0.2)] gap-2.5">
         <FormItem
           type="text"
-          label="Address"
-          registration={register("address", {
+          label="Owner Address"
+          registration={register("ownerAddress", {
             required: "Must enter",
           })}
-          error={errors.address?.message}
+          error={errors.ownerAddress?.message}
+        />
+        <FormItem
+          type="text"
+          label="Beneficiary Address"
+          registration={register("beneficiaryAddress", {
+            required: "Must enter",
+          })}
+          error={errors.beneficiaryAddress?.message}
         />
         <FormItem
           type="number"
@@ -49,7 +56,7 @@ function Vesting() {
         />
         <button
           type="submit"
-          onClick={handleSubmit(onSubmit)}
+          onClick={handleSubmit(onSubmitDeposit)}
           disabled={loadingDeposit}
           className={`w-full text-center px-4 py-2 bg-primary text-white rounded-4xl cursor-pointer`}
         >
@@ -58,7 +65,7 @@ function Vesting() {
         {/* {txHashDeposit && ( */}
         <button
           type="submit"
-          onClick={() => handleWithdraw()}
+          onClick={handleSubmit(onSubmitWithdraw)}
           disabled={loadingWithdraw}
           className={`w-full text-center px-4 py-2 bg-primary text-white rounded-4xl cursor-pointer`}
         >
