@@ -6,7 +6,6 @@ import {
   mConStr0,
   MeshTxBuilder,
   PlutusScript,
-  serializePlutusScript,
   SLOT_CONFIG_NETWORK,
   unixTimeToEnclosingSlot,
 } from "@meshsdk/core";
@@ -16,7 +15,7 @@ import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import vestingScript from "../data/vesting.json";
 import useUser from "./useUser";
-import { WithdrawForm } from "@/validations";
+import { VestingForm } from "@/validations";
 
 const script: PlutusScript = {
   code: vestingScript.validators[0].compiledCode,
@@ -32,95 +31,94 @@ function useVesting() {
     submitter: provider,
   });
 
-  const { address: scriptAddress } = serializePlutusScript(script);
+  // const { address: scriptAddress } = serializePlutusScript(script);
+  // console.log(scriptAddress);
 
   const { mutate: handleDeposit, isPending: loadingDeposit } = useMutation({
     mutationKey: ["/"],
-    mutationFn: async (data: WithdrawForm) => {
+    mutationFn: async (data: VestingForm) => {
       const { pubKeyHash: beneficiaryPubKeyHash } = deserializeAddress(
         data.beneficiaryAddress
       );
-      const { pubKeyHash: ownerPubKeyHash } = deserializeAddress(
-        data.ownerAddress
-      );
-      try {
-        const lockUntil = new Date(2025, 3, 7, 10, 25).getTime();
-        const tx = await txBuilder
-          .setNetwork("preview")
-          .txOut(scriptAddress, [
-            { unit: "lovelace", quantity: data.quantity.toString() },
-          ])
-          .txOutInlineDatumValue(
-            mConStr0([lockUntil, ownerPubKeyHash, beneficiaryPubKeyHash])
-          )
-          .changeAddress(data.ownerAddress!)
-          .selectUtxosFrom(utxos!)
-          .complete();
-        const signedTx = await wallet.signTx(tx);
-        const txHash = await wallet.submitTx(signedTx);
-        console.log(txHash);
-        toast.success("Deposit success");
-        setTxHashDeposit(txHash);
-      } catch (error) {
-        console.log(error);
-      }
+      const { pubKeyHash: ownerPubKeyHash } = deserializeAddress(address ?? "");
+      const lockUntil = new Date(2025, 3, 10, 10, 25).getTime();
+      const tx = await txBuilder
+        .setNetwork("preview")
+        .txOut(data.beneficiaryAddress, [
+          { unit: "lovelace", quantity: data.quantity.toString() },
+        ])
+        .txOutInlineDatumValue(
+          mConStr0([lockUntil, ownerPubKeyHash, beneficiaryPubKeyHash])
+        )
+        .changeAddress(address!)
+        .selectUtxosFrom(utxos!)
+        .complete();
+      const signedTx = await wallet.signTx(tx);
+      const txHash = await wallet.submitTx(signedTx);
+      return txHash;
+    },
+    onSuccess: (data) => {
+      console.log(data);
+      toast.success("Deposit success");
+      setTxHashDeposit(data);
+    },
+    onError(error) {
+      console.log(error);
     },
   });
 
   const { mutate: handleWithdraw, isPending: loadingWithdraw } = useMutation({
     mutationKey: ["/"],
-    mutationFn: async (data: WithdrawForm) => {
-      const fetchUtxos = await provider.fetchUTxOs(
-        "e12245c4bfb553cb09263eb1862d9e3a46e9009aac790c203c44fa102fb50ade"
-      );
-
+    mutationFn: async (data: VestingForm) => {
+      const fetchUtxos = await provider.fetchUTxOs(txHashDeposit);
       const { pubKeyHash: ownerPubKeyHash } = deserializeAddress(
         data.beneficiaryAddress
       );
-      try {
-        const datum = deserializeDatum<VestingDatum>(
-          fetchUtxos?.[0]?.output.plutusData!
-        );
-        const invalid = unixTimeToEnclosingSlot(
-          Math.min(
-            Number(datum.fields[0].int),
-            new Date(2025, 3, 7, 23, 50).getTime()
-          ),
-          SLOT_CONFIG_NETWORK.preview
-        );
+      const datum = deserializeDatum<VestingDatum>(
+        fetchUtxos?.[0]?.output.plutusData!
+      );
+      const invalid =
+        unixTimeToEnclosingSlot(
+          Math.min(Number(datum.fields[0].int), Date.now() - 15000),
+          SLOT_CONFIG_NETWORK.preprod
+        ) + 1;
+      await txBuilder
+        .setNetwork("preview")
+        .spendingPlutusScriptV3()
+        .txIn(
+          fetchUtxos[0].input.txHash,
+          fetchUtxos[0].input.outputIndex,
+          fetchUtxos[0].output.amount,
+          data.beneficiaryAddress
+        )
+        .spendingReferenceTxInInlineDatumPresent()
+        .spendingReferenceTxInRedeemerValue("")
+        .txInScript(script.code)
+        .txOut(address!, [])
+        .txInCollateral(
+          collateral?.[0]?.input.txHash!,
+          collateral?.[0]?.input.outputIndex!,
+          collateral?.[0]?.output.amount,
+          collateral?.[0]?.output.address
+        )
+        .invalidBefore(invalid)
+        .requiredSignerHash(ownerPubKeyHash)
+        .changeAddress(address!)
+        .selectUtxosFrom(fetchUtxos)
+        .complete();
 
-        const tx = await txBuilder
-          .setNetwork("preview")
-          .spendingPlutusScriptV3()
-          .txIn(
-            fetchUtxos[0].input.txHash,
-            fetchUtxos[0].input.outputIndex,
-            fetchUtxos[0].output.amount,
-            scriptAddress
-          )
-          .spendingReferenceTxInInlineDatumPresent()
-          .spendingReferenceTxInRedeemerValue("")
-          .txInScript(script.code)
-          .txOut(address!, [])
-          .txInCollateral(
-            collateral?.[0]?.input.txHash!,
-            collateral?.[0]?.input.outputIndex!,
-            collateral?.[0]?.output.amount,
-            collateral?.[0]?.output.address
-          )
-          .invalidBefore(invalid)
-          .requiredSignerHash(ownerPubKeyHash)
-          .changeAddress(address!)
-          .selectUtxosFrom(fetchUtxos)
-          .complete();
-        const signedTx = await wallet.signTx(tx, true);
-        const txHash = await wallet.submitTx(signedTx);
-        console.log(txHash);
-        toast.success("Withdraw success");
-        setTxHashDeposit(txHash);
-      } catch (error) {
-        console.log(error);
-      }
+      const unsignedTx = txBuilder.txHex;
+      const signedTx = await wallet.signTx(unsignedTx, true);
+      const txHash = await wallet.submitTx(signedTx);
+      console.log(txHash);
+
+      return txHash;
+    },
+    onSuccess: () => {
+      toast.success("Withdraw success");
+    },
+    onError: (error) => {
+      console.error("Withdraw error:", error);
     },
   });
 
