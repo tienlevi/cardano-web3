@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import FormItem from "@/components/ui/FormItem";
 import useVesting from "@/hooks/useVesting";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { vestingValidator, VestingForm } from "../validations";
+import { vestingValidator, VestingForm } from "@/validations";
 import TimeSelector from "@/components/TimeSelector";
 import { getTimes } from "@/utils/time";
 

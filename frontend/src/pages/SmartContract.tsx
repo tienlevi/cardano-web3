@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
-import useAsset from "../hooks/useAsset";
-import FormItem from "../components/ui/FormItem";
+import useAsset from "@/hooks/useAsset";
+import FormItem from "@/components/ui/FormItem";
 
 interface Inputs {
   quantity: string;

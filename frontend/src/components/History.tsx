@@ -1,6 +1,6 @@
-import Transaction from "../interface/transaction";
+import Transaction from "@/interface/transaction";
 import { Link } from "react-router-dom";
-import { previewCardanoUrl } from "../constants";
+import { previewCardanoUrl } from "@/constants";
 
 interface Props {
   transactions: Transaction[];

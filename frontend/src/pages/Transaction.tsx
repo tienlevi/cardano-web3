@@ -1,7 +1,7 @@
 import { useWallet } from "@meshsdk/react";
-import Transactions from "../components/Transactions";
-import History from "../components/History";
-import useTransactionStore from "../hooks/useTransactionStore";
+import Transactions from "@/components/Transactions";
+import History from "@/components/History";
+import useTransactionStore from "@/hooks/useTransactionStore";
 
 function Transaction() {
   const { connected } = useWallet();

@@ -1,4 +1,4 @@
-import SignData from "../components/SignData";
+import SignData from "@/components/SignData";
 import { useWallet } from "@meshsdk/react";
 
 function Home() {
