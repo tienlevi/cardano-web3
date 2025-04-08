@@ -1,16 +1,20 @@
-import FormItem from "../components/ui/FormItem";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
-import useVesting from "../hooks/useVesting";
+import FormItem from "@/components/ui/FormItem";
+import useVesting from "@/hooks/useVesting";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { vestingValidator, VestingForm } from "../validations";
+import TimeSelector from "@/components/TimeSelector";
+import { getTimes } from "@/utils/time";
 
 function Vesting() {
+  const [time, setTime] = useState<number>(0);
+  const formatDate = getTimes(new Date().getTime() + time);
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm({ resolver: yupResolver(vestingValidator) });
-
   const { handleDeposit, loadingDeposit, handleWithdraw, loadingWithdraw } =
     useVesting();
 
@@ -46,6 +50,19 @@ function Vesting() {
           })}
           error={errors.quantity?.message}
         />
+        <TimeSelector
+          onChange={(millisecond) => setTime(millisecond)}
+          includeSeconds={true}
+          label="Select Time"
+        />
+        <div className="flex">
+          <span>
+            {formatDate.day}/{formatDate.month}/{formatDate.year} -
+          </span>
+          <span>
+            {formatDate.hours}:{formatDate.minutes}:{formatDate.seconds}
+          </span>
+        </div>
         <button
           type="submit"
           onClick={handleSubmit(onSubmitDeposit)}
@@ -54,7 +71,6 @@ function Vesting() {
         >
           {loadingDeposit ? "Loading..." : "Deposit"}
         </button>
-        {/* {txHashDeposit && ( */}
         <button
           type="submit"
           onClick={handleSubmit(onSubmitWithdraw)}
@@ -63,7 +79,6 @@ function Vesting() {
         >
           {loadingWithdraw ? "Loading..." : "Withdraw"}
         </button>
-        {/* )} */}
       </div>
     </div>
   );
