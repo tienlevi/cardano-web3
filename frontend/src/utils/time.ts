@@ -14,3 +14,8 @@ export const getTimes = (timestamp: number) => {
 export const formatNumberTime = (num: number): string => {
   return num.toString().padStart(2, "0");
 };
+
+export const expireTime = (days: number) => {
+  const now = new Date();
+  return new Date(now.getTime() + days * 24 * 60 * 60 * 1000);
+};
