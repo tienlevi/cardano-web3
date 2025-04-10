@@ -2,7 +2,10 @@ use aiken/crypto.{VerificationKeyHash}
 
 pub type MintAction {
   owner: ByteArray,
-  msg: ByteArray,
+  token: Int,
+  name: ByteArray,
+  description: ByteArray,
+  image: ByteArray,
 }
 
 pub type MintTransaction {
