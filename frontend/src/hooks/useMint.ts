@@ -74,34 +74,8 @@ function useMint() {
       toast.error(error.info);
     },
   });
-  const forgingScriptBurn = ForgeScript.withOneSignature(address!);
-  const policyIdBurn = resolveScriptHash(forgingScriptBurn);
-  const { mutate: handleBurn } = useMutation({
-    mutationKey: ["/"],
-    mutationFn: async (data: MintForm) => {
-      const tokenName = data.tokenName;
-      const tokenHex = stringToHex(tokenName);
-      const unsignedTx = await txBuilder
-        .mint("1", policyIdBurn, tokenHex)
-        .mintingScript(forgingScript)
-        .changeAddress(address!)
-        .selectUtxosFrom(utxos!)
-        .complete();
 
-      const signedTx = await wallet.signTx(unsignedTx);
-      const txHash = await wallet.submitTx(signedTx);
-      return txHash;
-    },
-    onSuccess: () => {
-      toast.success("Burn success");
-    },
-    onError(error) {
-      console.log(error);
-      toast.error(error.message);
-    },
-  });
-
-  return { handleMint, handleBurn, ...rest };
+  return { handleMint, ...rest };
 }
 
 export default useMint;

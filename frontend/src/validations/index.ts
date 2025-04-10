@@ -24,7 +24,7 @@ export const mintValidator = yup.object({
       "Image must be a valid IPFS URI"
     )
     .required(),
-  quantity: yup.number().min(10000).integer().required(),
+  quantity: yup.number().integer().required(),
   expire: yup.number().min(1).integer().required(),
 });
 

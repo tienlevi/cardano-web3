@@ -10,7 +10,7 @@ function Mint() {
     handleSubmit,
     formState: { errors },
   } = useForm({ resolver: yupResolver(mintValidator) });
-  const { handleMint, handleBurn, isPending } = useMint();
+  const { handleMint, isPending } = useMint();
 
   return (
     <div className="w-[500px] mx-auto h-screen flex flex-col justify-center items-center gap-5">
@@ -55,14 +55,6 @@ function Mint() {
           className={`w-full text-center px-4 py-2 bg-primary text-white rounded-4xl cursor-pointer`}
         >
           {isPending ? "Loading..." : "Mint"}
-        </button>
-        <button
-          onClick={handleSubmit((data) => handleBurn(data))}
-          disabled={isPending}
-          type="submit"
-          className={`w-full text-center px-4 py-2 bg-primary text-white rounded-4xl cursor-pointer`}
-        >
-          {isPending ? "Loading..." : "Burn"}
         </button>
       </div>
     </div>
