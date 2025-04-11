@@ -41,14 +41,20 @@ function useVesting() {
         data.beneficiaryAddress
       );
       const { pubKeyHash: ownerPubKeyHash } = deserializeAddress(address ?? "");
-      const lockUntil = new Date(2025, 3, 10, 10, 25).getTime();
+      // const lockUntil = new Date(2025, 3, 12, 10, 25).getTime();
+      const lockUntil = new Date();
+      lockUntil.setMinutes(lockUntil.getMinutes() + 1);
       const tx = await txBuilder
         .setNetwork("preview")
         .txOut(data.beneficiaryAddress, [
           { unit: "lovelace", quantity: data.quantity.toString() },
         ])
         .txOutInlineDatumValue(
-          mConStr0([lockUntil, ownerPubKeyHash, beneficiaryPubKeyHash])
+          mConStr0([
+            lockUntil.getTime(),
+            ownerPubKeyHash,
+            beneficiaryPubKeyHash,
+          ])
         )
         .changeAddress(address!)
         .selectUtxosFrom(utxos!)
@@ -70,18 +76,23 @@ function useVesting() {
   const { mutate: handleWithdraw, isPending: loadingWithdraw } = useMutation({
     mutationKey: ["/"],
     mutationFn: async (data: VestingForm) => {
-      const fetchUtxos = await provider.fetchUTxOs(txHashDeposit);
+      const fetchUtxos = await provider.fetchUTxOs(
+        "636763080df6ba36ddea5c3e0fde1704e6b4c6db72ef40655b83348d78678f65"
+      );
+      const currentTime = new Date().getTime();
+      const laterTime = new Date(currentTime + 2 * 60 * 60 * 1000).getTime();
+      const invalidBefore = unixTimeToEnclosingSlot(
+        currentTime,
+        SLOT_CONFIG_NETWORK.preview
+      );
+      const invalidAfter = unixTimeToEnclosingSlot(
+        laterTime,
+        SLOT_CONFIG_NETWORK.preview
+      );
+
       const { pubKeyHash: ownerPubKeyHash } = deserializeAddress(
         data.beneficiaryAddress
       );
-      const datum = deserializeDatum<VestingDatum>(
-        fetchUtxos?.[0]?.output.plutusData!
-      );
-      const invalid =
-        unixTimeToEnclosingSlot(
-          Math.min(Number(datum.fields[0].int), Date.now() - 15000),
-          SLOT_CONFIG_NETWORK.preprod
-        ) + 1;
       await txBuilder
         .setNetwork("preview")
         .spendingPlutusScriptV3()
@@ -101,7 +112,8 @@ function useVesting() {
           collateral?.[0]?.output.amount,
           collateral?.[0]?.output.address
         )
-        .invalidBefore(invalid)
+        .invalidHereafter(invalidBefore)
+        .invalidBefore(invalidAfter)
         .requiredSignerHash(ownerPubKeyHash)
         .changeAddress(address!)
         .selectUtxosFrom(fetchUtxos)
@@ -118,7 +130,7 @@ function useVesting() {
       toast.success("Withdraw success");
     },
     onError: (error) => {
-      console.error("Withdraw error:", error);
+      console.log(error);
     },
   });
 
