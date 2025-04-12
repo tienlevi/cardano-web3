@@ -24,15 +24,13 @@ pub type OutputReference {
   output_index: Int,
 }
 
-pub type TransactionContext {
-  TransactionContext(ByteArray)
+pub type Output {
+  tokenName: ByteArray,
+  description: ByteArray,
 }
 
-pub type Output {
-  address: Address,
-  value: Value,
-  datum: Datum,
-  reference_script: Option<ScriptHash>,
+pub type TransactionContext {
+  TransactionContext(ByteArray)
 }
 
 pub type Input {

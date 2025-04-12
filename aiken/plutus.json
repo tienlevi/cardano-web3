@@ -1,0 +1,59 @@
+{
+  "preamble": {
+    "title": "aiken/mesh-sdk",
+    "description": "Aiken contracts for project 'aiken/mesh-sdk'",
+    "version": "0.0.0",
+    "plutusVersion": "v3",
+    "compiler": {
+      "name": "Aiken",
+      "version": "v1.1.15+f03633e"
+    },
+    "license": "Apache-2.0"
+  },
+  "validators": [
+    {
+      "title": "mint.usdt_token.mint",
+      "redeemer": {
+        "title": "redeemer",
+        "schema": {
+          "$ref": "#/definitions/types~1mint~1Output"
+        }
+      },
+      "compiledCode": "59013701010029800aba2aba1aba0aab9faab9eaab9dab9a488888896600264653001300800198041804800cc0200092225980099b8748000c01cdd500144c96600266e1d200030083754009132323322598009808801c4c8cc88cc008008004896600200314a115980099baf30130010038a51899801001180a000a01c40446602066e952000330104c0123d8799f581c6213d54eac79892450e0125a0ced7a86711f0522b8b44e62f9e2b3ea00ff00330104c114d8799f44555344544a5553445420746f6b656eff004bd7025eb80cdd2a40006601e98123d8799f581c6213d54eac79892450e0125a0ced7a86711f0522b8b44e62f9e2b3ea00ff003300f0084bd7045900e1bae300e001375c601c004601c00260126ea80122c8038dd7180598041baa0028b200c180400098019baa0088a4d13656400401",
+      "hash": "ae409d4ca418076adeb9c938ad2026630d3000a0b31c0c254b0ee503"
+    },
+    {
+      "title": "mint.usdt_token.else",
+      "redeemer": {
+        "schema": {}
+      },
+      "compiledCode": "59013701010029800aba2aba1aba0aab9faab9eaab9dab9a488888896600264653001300800198041804800cc0200092225980099b8748000c01cdd500144c96600266e1d200030083754009132323322598009808801c4c8cc88cc008008004896600200314a115980099baf30130010038a51899801001180a000a01c40446602066e952000330104c0123d8799f581c6213d54eac79892450e0125a0ced7a86711f0522b8b44e62f9e2b3ea00ff00330104c114d8799f44555344544a5553445420746f6b656eff004bd7025eb80cdd2a40006601e98123d8799f581c6213d54eac79892450e0125a0ced7a86711f0522b8b44e62f9e2b3ea00ff003300f0084bd7045900e1bae300e001375c601c004601c00260126ea80122c8038dd7180598041baa0028b200c180400098019baa0088a4d13656400401",
+      "hash": "ae409d4ca418076adeb9c938ad2026630d3000a0b31c0c254b0ee503"
+    }
+  ],
+  "definitions": {
+    "ByteArray": {
+      "dataType": "bytes"
+    },
+    "types/mint/Output": {
+      "title": "Output",
+      "anyOf": [
+        {
+          "title": "Output",
+          "dataType": "constructor",
+          "index": 0,
+          "fields": [
+            {
+              "title": "tokenName",
+              "$ref": "#/definitions/ByteArray"
+            },
+            {
+              "title": "description",
+              "$ref": "#/definitions/ByteArray"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

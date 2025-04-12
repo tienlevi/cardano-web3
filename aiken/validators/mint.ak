@@ -1,6 +1,6 @@
 use aiken/collection/list
 use aiken/crypto.{Blake2b_256, Hash}
-use cardano/assets.{PolicyId} as value
+use cardano/assets as value
 use cardano/transaction.{NoDatum, Transaction}
 use types/mint.{
   Address, Input, MintAction, MintTransaction, Output, OutputReference,
@@ -23,24 +23,16 @@ use types/mint.{
 
 validator usdt_token {
   mint(
-    _redeemer: Data,
-    tx_id: Hash<Blake2b_256, Transaction>,
+    redeemer: Output,
+    _tx_id: Hash<Blake2b_256, Transaction>,
     tx: TransactionContext,
   ) {
-    let utxo_ref = OutputReference { transaction_id: tx_id, output_index: 0 }
-    let input =
-      Input(
-        utxo_ref,
-        Output {
-          address: Address {
-            payment_credential: #"abcd",
-            stake_credential: None,
-          },
-          value: value.from_lovelace(1),
-          datum: NoDatum,
-          reference_script: None,
-        },
-      )
+    let utxo_ref =
+      OutputReference {
+        transaction_id: #"6213d54eac79892450e0125a0ced7a86711f0522b8b44e62f9e2b3ea",
+        output_index: 0,
+      }
+    let input = Input(utxo_ref, redeemer)
     when tx is {
       TransactionContext(_) -> list.has(inputs(utxo_ref), input)
     }
@@ -52,28 +44,18 @@ validator usdt_token {
 }
 
 pub fn inputs(utxo_ref: OutputReference) -> List<Input> {
-  [
-    Input(
-      utxo_ref,
-      Output {
-        address: Address { payment_credential: #"abcd", stake_credential: None },
-        value: value.from_lovelace(1),
-        datum: NoDatum,
-        reference_script: None,
-      },
-    ),
-  ]
+  [Input(utxo_ref, Output { tokenName: "USDT", description: "USDT token" })]
 }
 
 test can_mint() {
-  let own_policy_id = #"ab"
   let utxo_ref =
     OutputReference {
       transaction_id: #"6213d54eac79892450e0125a0ced7a86711f0522b8b44e62f9e2b3ea",
       output_index: 0,
     }
-  let tx = TransactionContext(#"231231")
-  usdt_token.mint(own_policy_id, utxo_ref.transaction_id, tx)
+  let redeemer = Output { tokenName: "USDT", description: "USDT token" }
+  let tx = TransactionContext(utxo_ref.transaction_id)
+  usdt_token.mint(redeemer, utxo_ref.transaction_id, tx)
 }
 // test mint_action() {
 //   let redeemer =
