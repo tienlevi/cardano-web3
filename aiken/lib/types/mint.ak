@@ -1,4 +1,6 @@
-use aiken/crypto.{VerificationKeyHash}
+use aiken/crypto.{Blake2b_256, Hash, ScriptHash, VerificationKeyHash}
+use cardano/assets.{Value}
+use cardano/transaction.{Datum, Transaction}
 
 pub type MintAction {
   owner: ByteArray,
@@ -10,4 +12,30 @@ pub type MintAction {
 
 pub type MintTransaction {
   extra_signatories: List<VerificationKeyHash>,
+}
+
+pub type Address {
+  payment_credential: ByteArray,
+  stake_credential: Option<ByteArray>,
+}
+
+pub type OutputReference {
+  transaction_id: Hash<Blake2b_256, Transaction>,
+  output_index: Int,
+}
+
+pub type TransactionContext {
+  TransactionContext(ByteArray)
+}
+
+pub type Output {
+  address: Address,
+  value: Value,
+  datum: Datum,
+  reference_script: Option<ScriptHash>,
+}
+
+pub type Input {
+  output_reference: OutputReference,
+  output: Output,
 }

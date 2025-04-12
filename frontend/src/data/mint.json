@@ -1,0 +1,74 @@
+{
+  "preamble": {
+    "title": "aiken/mesh-sdk",
+    "description": "Aiken contracts for project 'aiken/mesh-sdk'",
+    "version": "0.0.0",
+    "plutusVersion": "v3",
+    "compiler": {
+      "name": "Aiken",
+      "version": "v1.1.15+f03633e"
+    },
+    "license": "Apache-2.0"
+  },
+  "validators": [
+    {
+      "title": "mint.mint_token.mint",
+      "redeemer": {
+        "title": "redeemer",
+        "schema": {
+          "$ref": "#/definitions/types~1mint~1MintAction"
+        }
+      },
+      "compiledCode": "59013101010029800aba2aba1aab9faab9eaab9dab9a48888896600264646644b30013370e900018031baa0018992cc004cdc3a4000600e6ea800e264646464653001375c601e003375c601e00b375a601e009375c601e007375c601e004911112cc004c05401a2b300132330010013758602a60266ea8c054040896600200314a115980099b8f375c602c00201b14a31330020023017001404880aa2b30013371e6eb8c050c054c054c048dd5006a450455534454008acc004cdc79bae30143015301530153012375401a91010855534454204e465400899b87375a6028602a60246ea803520a09c018a50404114a0808229410104590130c03c004c038004c034004c030004c020dd5001c590061bae300930073754003164014600e002600e6010002600e00260066ea801e29344d95900101",
+      "hash": "e051788fcb39b0e30bce39161b72ab1693404d5af0c1c1aad06ea4c6"
+    },
+    {
+      "title": "mint.mint_token.else",
+      "redeemer": {
+        "schema": {}
+      },
+      "compiledCode": "59013101010029800aba2aba1aab9faab9eaab9dab9a48888896600264646644b30013370e900018031baa0018992cc004cdc3a4000600e6ea800e264646464653001375c601e003375c601e00b375a601e009375c601e007375c601e004911112cc004c05401a2b300132330010013758602a60266ea8c054040896600200314a115980099b8f375c602c00201b14a31330020023017001404880aa2b30013371e6eb8c050c054c054c048dd5006a450455534454008acc004cdc79bae30143015301530153012375401a91010855534454204e465400899b87375a6028602a60246ea803520a09c018a50404114a0808229410104590130c03c004c038004c034004c030004c020dd5001c590061bae300930073754003164014600e002600e6010002600e00260066ea801e29344d95900101",
+      "hash": "e051788fcb39b0e30bce39161b72ab1693404d5af0c1c1aad06ea4c6"
+    }
+  ],
+  "definitions": {
+    "ByteArray": {
+      "dataType": "bytes"
+    },
+    "Int": {
+      "dataType": "integer"
+    },
+    "types/mint/MintAction": {
+      "title": "MintAction",
+      "anyOf": [
+        {
+          "title": "MintAction",
+          "dataType": "constructor",
+          "index": 0,
+          "fields": [
+            {
+              "title": "owner",
+              "$ref": "#/definitions/ByteArray"
+            },
+            {
+              "title": "token",
+              "$ref": "#/definitions/Int"
+            },
+            {
+              "title": "name",
+              "$ref": "#/definitions/ByteArray"
+            },
+            {
+              "title": "description",
+              "$ref": "#/definitions/ByteArray"
+            },
+            {
+              "title": "image",
+              "$ref": "#/definitions/ByteArray"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
