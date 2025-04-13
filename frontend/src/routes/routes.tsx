@@ -4,6 +4,7 @@ import Home from "@/pages/Home";
 import Transaction from "@/pages/Transaction";
 import Vesting from "@/pages/Vesting";
 import Mint from "@/pages/Mint";
+import MintJson from "@/pages/MintJson";
 
 export const routers: Routes[] = [
   {
@@ -23,6 +24,12 @@ export const routers: Routes[] = [
     id: "mint",
     name: "Mint",
     element: <Mint />,
+  },
+  {
+    href: "/mint-json",
+    id: "mint-json",
+    name: "Mint Json",
+    element: <MintJson />,
   },
   {
     href: "/smart-contract",

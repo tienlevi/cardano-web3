@@ -1,8 +1,10 @@
 import {
   deserializeAddress,
   ForgeScript,
+  mConStr0,
   MeshTxBuilder,
   NativeScript,
+  PlutusScript,
   resolveScriptHash,
   resolveSlotNo,
   stringToHex,
@@ -17,7 +19,7 @@ import { MintForm } from "@/validations";
 
 function useMint() {
   const { wallet } = useWallet();
-  const { address, utxos } = useUser();
+  const { address, utxos, collateral } = useUser();
   const txBuilder = new MeshTxBuilder({
     fetcher: provider,
     verbose: true,
@@ -75,7 +77,61 @@ function useMint() {
     },
   });
 
-  return { handleMint, ...rest };
+  const { mutate: handleMintPlutus } = useMutation({
+    mutationKey: [""],
+    mutationFn: async (data: {
+      tokenName: string;
+      description: string;
+      image: string;
+      quantity: number;
+      expire: number;
+      json: any;
+    }) => {
+      const script: PlutusScript = {
+        code: data.json,
+        version: "V3",
+      };
+      const policyId = resolveScriptHash(script.code, "V3");
+      const tokenName = data.tokenName;
+      const tokenNameHex = stringToHex(tokenName);
+      const metadata = {
+        [policyId]: {
+          [tokenName]: {
+            tokenHex: tokenNameHex,
+            description: data.description,
+            image: data.image,
+          },
+        },
+      };
+      const dateTime = expireTime(data.expire);
+      const slot = resolveSlotNo("preview", dateTime.getTime());
+
+      const unsignedTx = await txBuilder
+        .mintPlutusScriptV3()
+        .setNetwork("preview")
+        .mint(data.quantity.toString(), policyId, tokenNameHex)
+        .mintingScript(script.code)
+        .mintRedeemerValue(mConStr0([data.tokenName, data.description]))
+        .metadataValue(721, metadata)
+        .changeAddress(address!)
+        .invalidHereafter(Number(slot))
+        .selectUtxosFrom(utxos!)
+        .complete();
+
+      const signedTx = await wallet.signTx(unsignedTx, true);
+      const txHash = await wallet.submitTx(signedTx);
+      return txHash;
+    },
+    onSuccess: () => {
+      toast.success("Mint success");
+    },
+    onError: (error: any) => {
+      console.log(error);
+      toast.error(error.message);
+    },
+  });
+
+  return { handleMint, handleMintPlutus, ...rest };
 }
 
 export default useMint;

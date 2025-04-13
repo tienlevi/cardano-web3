@@ -1,23 +1,36 @@
+import { useState } from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
-import FormItem from "@/components/ui/FormItem";
-import { mintValidator } from "@/validations";
 import useMint from "@/hooks/useMint";
+import { mintValidator } from "@/validations";
+import FormItem from "@/components/ui/FormItem";
+import JsonUploader from "@/components/JsonUploader";
+import { toast } from "react-toastify";
 
-function Mint() {
+function MintJson() {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm({ resolver: yupResolver(mintValidator) });
-  const { handleMint, isPending } = useMint();
+  const { handleMintPlutus, isPending } = useMint();
+  const [jsonFile, setJsonFile] = useState<any>(null);
+
+  const handleJsonUpload = (json: any) => {
+    setJsonFile(json);
+  };
+
+  const onSubmit = (data: any) => {
+    if (!jsonFile) {
+      return toast.warning("Please add json file");
+    }
+    handleMintPlutus({ ...data, json: jsonFile.validators[0].compiledCode });
+  };
 
   return (
     <div className="w-[500px] mx-auto h-screen flex flex-col justify-center items-center gap-5">
-      <div className="text-[30px] font-bold text-center">Mint</div>
       <div className="w-full flex flex-col bg-white p-3 rounded-2xl !shadow-[0_1px_8px_0_rgba(0,0,0,0.2)] gap-2.5">
-        <div className="text-[24px] text-center">Create mint token</div>
+        <div className="text-[24px] text-center">Mint token with JSON</div>
         <FormItem
           type="text"
           label="Token name"
@@ -49,23 +62,18 @@ function Mint() {
           registration={register("expire")}
           error={errors.expire?.message}
         />
+        <JsonUploader onUpload={handleJsonUpload} />
         <button
-          onClick={handleSubmit((data) => handleMint(data))}
+          onClick={handleSubmit(onSubmit)}
           disabled={isPending}
           type="submit"
           className={`w-full text-center px-4 py-2 bg-primary text-white rounded-4xl cursor-pointer`}
         >
-          {isPending ? "Loading..." : "Mint"}
+          {isPending ? "Loading..." : "Mint with plutus script"}
         </button>
-        <Link
-          to={`/mint-json`}
-          className="text-[20px] text-blue-500 decoration-solid"
-        >
-          Mint with plutus JSON
-        </Link>
       </div>
     </div>
   );
 }
 
-export default Mint;
+export default MintJson;
