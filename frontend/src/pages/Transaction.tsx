@@ -22,6 +22,7 @@ function Transaction() {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm({
     resolver: yupResolver(transactionValidator),
   });
@@ -35,40 +36,69 @@ function Transaction() {
     mutationKey: ["/"],
     mutationFn: async (data: TransactionForm) => {
       const id = uuidv4();
-      const addresses = data.address.split(",").map((addr) => addr);
+      const addresses = data.address.split(",").map((addr) => addr.trim());
+
+      // Add transaction to store as pending
       addTransaction({
         id: id,
-        address: data.address,
+        address: addresses.join(", "),
         status: "pending",
         hash: "",
         quantity: data.quantity,
         date: new Date().toLocaleString(),
       });
-      addresses.forEach((addr) => {
-        txBuilder.txOut(addr, [
-          { unit: "lovelace", quantity: data.quantity.toString() },
-        ]);
-      });
+
       try {
-        const tx = await txBuilder
+        // Create a new transaction builder for each transaction
+        const builder = new MeshTxBuilder({
+          fetcher: provider,
+          verbose: true,
+        });
+
+        // Add outputs for each address
+        addresses.forEach((addr) => {
+          builder.txOut(addr, [
+            { unit: "lovelace", quantity: data.quantity.toString() },
+          ]);
+        });
+
+        // Set validity time range - this helps avoid the TimeTranslationPastHorizon error
+        // Current time in seconds
+        const now = Math.floor(Date.now() / 1000);
+        // 10 hours in the future (36000 seconds)
+        const futureTime = now + 36000;
+
+        // Complete the transaction with proper validity interval
+        const tx = await builder
           .setNetwork("preview")
           .changeAddress(address!)
           .selectUtxosFrom(utxos!)
+          .invalidBefore(now) // Transaction valid from now
+          .invalidHereafter(futureTime) // Transaction valid until future time
           .complete();
 
-        const signedTxs = await wallet.signTx(tx);
-        const txHash = await wallet.submitTx(signedTxs);
+        // Sign and submit
+        const signedTx = await wallet.signTx(tx);
+        const txHash = await wallet.submitTx(signedTx);
+
+        // Update transaction status
         updateTransaction(id, {
           id: id,
           address: addresses.join(", "),
-          status: txHash ? "completed" : "failed",
+          status: "completed",
           hash: txHash,
           quantity: data.quantity,
           date: new Date().toLocaleString(),
         });
 
+        // Reset form after successful transaction
+        reset();
+
         return txHash;
       } catch (error) {
+        console.error("Transaction error:", error);
+
+        // Update transaction as failed
         updateTransaction(id, {
           id: id,
           address: addresses.join(", "),
@@ -77,17 +107,21 @@ function Transaction() {
           quantity: data.quantity,
           date: new Date().toLocaleString(),
         });
-        toast.error("Transaction failed");
+
+        throw error;
       }
     },
-    onSuccess: (data) => {
-      if (data) {
-        toast.success("Transaction success");
+    onSuccess: (txHash) => {
+      if (txHash) {
+        toast.success("Transaction successful");
       } else {
         toast.error("Transaction failed");
       }
     },
-    onError: () => {},
+    onError: (error) => {
+      console.error("Transaction error:", error);
+      toast.error("Transaction failed. Please try again.");
+    },
   });
 
   const onSubmit = (data: TransactionForm) => {
@@ -104,18 +138,18 @@ function Transaction() {
             className="w-full flex flex-col bg-white p-3 rounded-2xl !shadow-[0_1px_8px_0_rgba(0,0,0,0.2)] gap-2.5"
           >
             <FormItem
-              label="Address"
+              label="Address (separate multiple addresses with commas)"
               registration={register("address")}
               error={errors.address?.message}
             />
             <FormItem
-              label="Quantity (ADA)"
+              label="Quantity (ADA per transaction)"
               type="number"
               registration={register("quantity")}
               error={errors.quantity?.message}
             />
 
-            <Button>{isPending ? "Sending..." : "Send Transaction"}</Button>
+            <Button>{isPending ? "Processing..." : "Send Transaction"}</Button>
           </form>
           <History transactions={transactions} />
         </>
