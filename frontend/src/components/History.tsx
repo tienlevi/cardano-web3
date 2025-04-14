@@ -19,8 +19,8 @@ function History({ transactions }: Props) {
   return (
     <div className="w-full">
       <div className="text-3xl font-bold mb-2">Recent Transactions</div>
-      {transactions?.map((transaction) => (
-        <div className="bg-white p-3 rounded-2xl my-2">
+      {transactions?.map((transaction, index) => (
+        <div key={index} className="bg-white p-3 rounded-2xl my-2">
           <div className="text-[16px] leading-7">To: {transaction.address}</div>
           <div className="text-[16px] leading-7">
             Quantity: {transaction.quantity} ADA
@@ -28,8 +28,9 @@ function History({ transactions }: Props) {
           <div className="text-[16px] leading-7 break-words">
             <span>Hash:</span>{" "}
             <Link
+              target="_blank"
               className="text-blue-500"
-              to={`${previewCardanoUrl}/tx/${transaction.hash}`}
+              to={`${previewCardanoUrl}/transaction/${transaction.hash}`}
             >
               {transaction.hash}
             </Link>
