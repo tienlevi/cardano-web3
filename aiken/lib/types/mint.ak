@@ -24,7 +24,7 @@ pub type OutputReference {
   output_index: Int,
 }
 
-pub type Output {
+pub type MintRedeemer {
   tokenName: ByteArray,
   image: ByteArray,
   description: ByteArray,
