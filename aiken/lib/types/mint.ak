@@ -26,6 +26,7 @@ pub type OutputReference {
 
 pub type Output {
   tokenName: ByteArray,
+  image: ByteArray,
   description: ByteArray,
 }
 

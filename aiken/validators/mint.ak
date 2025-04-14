@@ -44,7 +44,12 @@ validator usdt_token {
 }
 
 pub fn inputs(utxo_ref: OutputReference) -> List<Input> {
-  [Input(utxo_ref, Output { tokenName: "USDT", description: "USDT token" })]
+  [
+    Input(
+      utxo_ref,
+      Output { tokenName: "USDT", image: "", description: "USDT token" },
+    ),
+  ]
 }
 
 test can_mint() {

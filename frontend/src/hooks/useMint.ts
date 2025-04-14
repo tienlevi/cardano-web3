@@ -22,7 +22,7 @@ function useMint() {
   const { address, utxos, collateral } = useUser();
   const txBuilder = new MeshTxBuilder({
     fetcher: provider,
-    verbose: true,
+    submitter: provider,
   });
   const { pubKeyHash } = deserializeAddress(
     address! ??
@@ -35,6 +35,8 @@ function useMint() {
       { type: "sig", keyHash: pubKeyHash },
     ],
   };
+  console.log(utxos);
+
   const forgingScript = ForgeScript.fromNativeScript(nativeScript);
   const policyId = resolveScriptHash(forgingScript);
 
@@ -77,7 +79,7 @@ function useMint() {
     },
   });
 
-  const { mutate: handleMintPlutus } = useMutation({
+  const { mutate: handleMintPlutus, isPending: isLoadingPlutus } = useMutation({
     mutationKey: [""],
     mutationFn: async (data: {
       tokenName: string;
@@ -93,6 +95,7 @@ function useMint() {
       };
       const policyId = resolveScriptHash(script.code, "V3");
       const tokenName = data.tokenName;
+
       const tokenNameHex = stringToHex(tokenName);
       const metadata = {
         [policyId]: {
@@ -114,6 +117,14 @@ function useMint() {
         .mintRedeemerValue(mConStr0([data.tokenName, data.description]))
         .metadataValue(721, metadata)
         .changeAddress(address!)
+        .txInCollateral(
+          collateral?.[0]?.input.txHash!,
+          collateral?.[0]?.input.outputIndex!,
+          collateral?.[0].output.amount.filter(
+            (asset: any) => asset.unit === "lovelace"
+          ),
+          collateral?.[0]?.output.address
+        )
         .invalidHereafter(Number(slot))
         .selectUtxosFrom(utxos!)
         .complete();
@@ -127,11 +138,11 @@ function useMint() {
     },
     onError: (error: any) => {
       console.log(error);
-      toast.error(error.message);
+      toast.error("mint error");
     },
   });
 
-  return { handleMint, handleMintPlutus, ...rest };
+  return { handleMint, handleMintPlutus, isLoadingPlutus, ...rest };
 }
 
 export default useMint;

@@ -44,7 +44,12 @@ export const mintValidator = yup.object({
     )
     .required(),
   quantity: yup.number().integer().required(),
-  expire: yup.number().min(1).integer().required(),
+  expire: yup
+    .number()
+    .min(1)
+    .max(7, "Maximum expiry time is 7 days")
+    .integer()
+    .required(),
 });
 
 export type TransactionForm = yup.InferType<typeof transactionValidator>;

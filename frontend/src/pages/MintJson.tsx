@@ -13,7 +13,7 @@ function MintJson() {
     handleSubmit,
     formState: { errors },
   } = useForm({ resolver: yupResolver(mintValidator) });
-  const { handleMintPlutus, isPending } = useMint();
+  const { handleMintPlutus, isLoadingPlutus } = useMint();
   const [jsonFile, setJsonFile] = useState<any>(null);
 
   const handleJsonUpload = (json: any) => {
@@ -65,11 +65,11 @@ function MintJson() {
         <JsonUploader onUpload={handleJsonUpload} />
         <button
           onClick={handleSubmit(onSubmit)}
-          disabled={isPending}
+          disabled={isLoadingPlutus}
           type="submit"
           className={`w-full text-center px-4 py-2 bg-primary text-white rounded-4xl cursor-pointer`}
         >
-          {isPending ? "Loading..." : "Mint with plutus script"}
+          {isLoadingPlutus ? "Loading..." : "Mint with plutus script"}
         </button>
       </div>
     </div>

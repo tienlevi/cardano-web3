@@ -16,6 +16,8 @@ export const formatNumberTime = (num: number): string => {
 };
 
 export const expireTime = (days: number) => {
+  // Limit to a maximum of 7 days to avoid TimeTranslationPastHorizon errors
+  const safeDays = Math.min(days, 7);
   const now = new Date();
-  return new Date(now.getTime() + days * 24 * 60 * 60 * 1000);
+  return new Date(now.getTime() + safeDays * 24 * 60 * 60 * 1000);
 };
