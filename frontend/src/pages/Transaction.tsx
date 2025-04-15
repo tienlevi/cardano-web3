@@ -27,10 +27,6 @@ function Transaction() {
     resolver: yupResolver(transactionValidator),
   });
   const { address, utxos } = useUser();
-  const txBuilder = new MeshTxBuilder({
-    fetcher: provider,
-    verbose: true,
-  });
 
   const { mutate: handleSendTransaction, isPending } = useMutation({
     mutationKey: ["/"],
