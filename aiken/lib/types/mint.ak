@@ -36,5 +36,5 @@ pub type TransactionContext {
 
 pub type Input {
   output_reference: OutputReference,
-  output: Output,
+  output: MintRedeemer,
 }

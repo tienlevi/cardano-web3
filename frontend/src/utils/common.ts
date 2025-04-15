@@ -1,3 +1,4 @@
+import { applyParamsToScript, serializePlutusScript } from "@meshsdk/core";
 import { provider } from "./provider";
 
 export async function getUtxoByTxHash(txHash: string) {
@@ -6,4 +7,15 @@ export async function getUtxoByTxHash(txHash: string) {
     throw new Error("UTxO not found");
   }
   return utxos[0];
+}
+
+export function getScript(json: any) {
+  const scriptCbor = applyParamsToScript(json, []);
+
+  const scriptAddr = serializePlutusScript({
+    code: scriptCbor,
+    version: "V3",
+  }).address;
+
+  return { scriptCbor, scriptAddr };
 }

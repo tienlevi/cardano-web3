@@ -1,25 +1,46 @@
 use aiken/collection/list
-use cardano/transaction.{OutputReference}
-use types/vesting.{Datum, Transaction}
+use aiken/crypto.{Blake2b_256, Hash, VerificationKeyHash}
+use cardano/transaction.{OutputReference, Spend, Transaction, ValidityRange}
+
+pub type VestingDatum {
+  /// POSIX time in milliseconds, e.g. 1672843961000
+  lock_until: Int,
+  /// Owner's credentials
+  owner: VerificationKeyHash,
+  /// Beneficiary's credentials
+  beneficiary: VerificationKeyHash,
+}
 
 validator vest {
   spend(
-    datum: Option<Datum>,
-    _redeemer: Int,
-    _ref: OutputReference,
+    datum_opt: Option<VestingDatum>,
+    _redeemer: Data,
+    _input: OutputReference,
     tx: Transaction,
   ) {
-    expect Some(Datum { lock_until, owner, benificiary }) = datum
-
-    let deadline = tx.lower_bound <= lock_until && tx.upper_bound <= lock_until
-
-    let is_signed_by_benificiary = list.has(tx.extra_signatories, benificiary)
-
-    is_signed_by_benificiary && deadline
+    expect Some(datum) = datum_opt
+    or {
+      key_signed(crypto.blake2b_224(tx.extra_signatories), datum.owner),
+      and {
+        key_signed(tx.extra_signatories, datum.beneficiary),
+        valid_after(tx.validity_range, datum.lock_until),
+      },
+    }
   }
 
   else(_) {
     fail
+  }
+}
+
+fn key_signed(transaction: Transaction, vk: VerificationKeyHash) {
+  list.has(transaction.extra_signatories, vk)
+}
+
+fn valid_after(range: ValidityRange, lock_expiration_time: Int) {
+  when range.lower_bound.bound_type is {
+    Finite(tx_earliest_time) -> lock_expiration_time <= tx_earliest_time
+    _ -> False
   }
 }
 

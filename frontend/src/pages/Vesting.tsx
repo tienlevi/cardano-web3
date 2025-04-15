@@ -9,21 +9,25 @@ import { getTimes } from "@/utils/time";
 
 function Vesting() {
   const [time, setTime] = useState<number>(0);
+  const [txHash, setTxHash] = useState<string>("");
   const formatDate = getTimes(new Date().getTime() + time);
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm({ resolver: yupResolver(vestingValidator) });
   const { handleDeposit, loadingDeposit, handleWithdraw, loadingWithdraw } =
-    useVesting();
+    useVesting({
+      timeLock: time,
+      txHashDeposit: txHash,
+      onTxHashDeposit: (value: string) => {
+        setTxHash(value);
+      },
+    });
 
   const onSubmitDeposit = (data: VestingForm) => {
     handleDeposit(data);
-  };
-
-  const onSubmitWithdraw = (data: VestingForm) => {
-    handleWithdraw(data);
   };
 
   return (
@@ -71,14 +75,17 @@ function Vesting() {
         >
           {loadingDeposit ? "Loading..." : "Deposit"}
         </button>
-        <button
-          type="submit"
-          onClick={handleSubmit(onSubmitWithdraw)}
-          disabled={loadingWithdraw}
-          className={`w-full text-center px-4 py-2 bg-primary text-white rounded-4xl cursor-pointer`}
-        >
-          {loadingWithdraw ? "Loading..." : "Withdraw"}
-        </button>
+        <div>Hash: {txHash}</div>
+        {txHash && (
+          <button
+            type="submit"
+            onClick={() => handleWithdraw()}
+            disabled={loadingWithdraw}
+            className={`w-full text-center px-4 py-2 bg-primary text-white rounded-4xl cursor-pointer`}
+          >
+            {loadingWithdraw ? "Loading..." : "Withdraw"}
+          </button>
+        )}
       </div>
     </div>
   );
